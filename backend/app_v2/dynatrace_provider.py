@@ -37,10 +37,24 @@ class DynatraceProvider(RealityProvider):
         services = []
 
         for entity in response.get("entities", []):
+
+            service_name = entity.get("displayName", "")
+
+            # Ignore Dynatrace-generated technical services.
+            if service_name.startswith("Netty on localhost"):
+                continue
+
+            if service_name.startswith("Requests on localhost"):
+                continue
+
+            # Ignore port-only service names.
+            if service_name in [":80", ":8080", ":9079"]:
+                continue
+
             services.append(
                 {
                     "id": entity.get("entityId"),
-                    "name": entity.get("displayName"),
+                    "name": service_name,
                     "entity_type": "SERVICE",
                     "raw": entity,
                 }

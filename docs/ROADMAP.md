@@ -113,3 +113,9 @@ In Progress:
 - Host ingestion
 - Dependency ingestion
 - Metrics ingestion
+### Completed
+
+- Live Dynatrace Provider
+- SERVICE entity ingestion
+- Runtime Reality normalization
+- Live SERVICE_EXISTS evidence test

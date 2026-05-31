@@ -435,3 +435,19 @@ Converts Dynatrace entities into normalized RuntimeReality.
 Current support:
 
 - SERVICE entities
+## test_dynatrace_adapter.py
+
+Purpose:
+
+Validate the complete Claim → Evidence flow using
+live Dynatrace runtime reality.
+
+Current Validation:
+
+SERVICE_EXISTS
+
+Future Validation:
+
+- SERVICE_HEALTHY
+- NO_ACTIVE_PROBLEMS
+- DEPENDENCY_EXISTS

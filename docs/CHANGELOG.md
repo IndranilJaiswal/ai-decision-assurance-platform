@@ -128,3 +128,12 @@ Dynatrace Provider
 RuntimeReality
 ↓
 Evidence Collection
+### Improved
+
+- Runtime reality normalization
+- Filtering of Dynatrace technical services
+- Live Dynatrace provider now returns business-relevant services
+
+### Verified
+
+- SERVICE_EXISTS can be tested against live Dynatrace service reality
