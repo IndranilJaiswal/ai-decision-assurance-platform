@@ -552,3 +552,52 @@ Recommended Actions
 The explanation engine does not influence assurance outcomes.
 
 It explains outcomes already produced by the assurance system.
+
+## 2026-05-31
+
+### Added
+
+Assurance Explanation Engine
+
+Files Added
+
+* assurance_explanation_models.py
+* assurance_explanation_engine.py
+* test_assurance_explanation_engine.py
+
+### New Capability
+
+The platform can now generate human-readable explanations from deterministic assurance outcomes.
+
+Supported Statuses
+
+* VERIFIED
+* PARTIALLY_ASSURED
+* FAILED
+
+### Example
+
+Input
+
+Requirement Status:
+PARTIALLY_ASSURED
+
+Evidence Gaps:
+
+* response_time
+* failure_rate
+
+Output
+
+The requirement is partially assured because some supporting claims could not be justified due to missing evidence.
+
+Recommendations
+
+* Collect response time evidence
+* Collect failure rate evidence
+
+### Governance Principle
+
+The explanation engine does not influence assurance outcomes.
+
+It explains outcomes already produced by the assurance system.

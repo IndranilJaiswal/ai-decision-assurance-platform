@@ -1,0 +1,92 @@
+## Phase 3A – Assurance Explanation Engine
+
+### Purpose
+
+Convert deterministic assurance outcomes into human-readable explanations.
+
+The Assurance Engine determines assurance status.
+
+The Assurance Explanation Engine explains assurance status.
+
+### Architecture
+
+Requirement
+↓
+Policy Agent
+↓
+Suggested Claims
+↓
+Dashboard Approval
+↓
+Approved Claims
+↓
+Evidence Collection
+↓
+Claim Assurance
+↓
+Requirement Assurance
+↓
+Assurance Explanation Engine
+↓
+Dashboard
+
+### Responsibilities
+
+Requirement Assurance Engine
+
+* Evaluate claim results
+* Determine requirement status
+
+Assurance Explanation Engine
+
+* Explain requirement outcomes
+* Explain evidence gaps
+* Explain failed claims
+* Generate recommendations
+
+### Governance Principle
+
+The explanation engine does not influence assurance outcomes.
+
+Assurance remains evidence-based and deterministic.
+
+The explanation engine only interprets results already produced by the assurance system.
+
+### Example
+
+Requirement Status
+
+PARTIALLY_ASSURED
+
+Supporting Evidence
+
+* Service exists
+
+Missing Evidence
+
+* response_time
+* failure_rate
+
+Generated Explanation
+
+The requirement is partially assured.
+
+The service exists and has been observed in runtime reality.
+
+However, service health cannot currently be justified because response time and failure rate evidence are unavailable.
+
+Recommended next step:
+
+Enable collection of response time and failure rate evidence.
+
+### Future Evolution
+
+Current
+
+Deterministic explanation generation.
+
+Future
+
+Gemini-powered explanation generation.
+
+The explanation contract remains unchanged.

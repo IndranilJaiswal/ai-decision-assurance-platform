@@ -10,9 +10,7 @@ from requirement_assurance_models import RequirementAssuranceResult
 
 
 class MockClaimResult:
-    """
-    Lightweight mock claim result for explanation testing.
-    """
+    """Lightweight mock claim result for explanation testing."""
 
     def __init__(self, claim_id, status, evidence_gaps):
         self.claim_id = claim_id
@@ -21,6 +19,7 @@ class MockClaimResult:
 
 
 def main():
+    """Run explanation test."""
 
     requirement_result = RequirementAssuranceResult(
         requirement_id="REQ-002",
@@ -50,7 +49,6 @@ def main():
     )
 
     engine = AssuranceExplanationEngine()
-
     explanation = engine.explain(requirement_result)
 
     print("\nAI Assurance Explanation")

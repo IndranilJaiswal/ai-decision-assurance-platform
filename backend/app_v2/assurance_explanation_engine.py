@@ -12,21 +12,17 @@ Current:
 Deterministic explanation generation.
 
 Future:
-LLM-assisted explanation generation using the same input/output contract.
+Gemini-assisted explanation generation using the same input/output contract.
 """
 
 from assurance_explanation_models import AssuranceExplanation
 
 
 class AssuranceExplanationEngine:
-    """
-    Generates explanations from requirement assurance results.
-    """
+    """Generates explanations from requirement assurance results."""
 
     def explain(self, requirement_result) -> AssuranceExplanation:
-        """
-        Generate an explanation for a requirement assurance result.
-        """
+        """Generate an explanation for a requirement assurance result."""
 
         if requirement_result.status == "VERIFIED":
             return self._explain_verified(requirement_result)
@@ -49,9 +45,7 @@ class AssuranceExplanationEngine:
         )
 
     def _explain_verified(self, requirement_result) -> AssuranceExplanation:
-        """
-        Explain a verified requirement.
-        """
+        """Explain a verified requirement."""
 
         return AssuranceExplanation(
             title="Requirement Verified",
@@ -73,14 +67,11 @@ class AssuranceExplanationEngine:
         self,
         requirement_result,
     ) -> AssuranceExplanation:
-        """
-        Explain a partially assured requirement.
-        """
+        """Explain a partially assured requirement."""
 
         evidence_gaps = []
 
         for claim_result in requirement_result.claim_results:
-
             for gap in claim_result.evidence_gaps:
                 evidence_gaps.append(
                     f"{claim_result.claim_id}: {gap}"
@@ -88,8 +79,10 @@ class AssuranceExplanationEngine:
 
         details = [
             f"Verified claims: {requirement_result.verified_claims}",
-            f"Claims with insufficient evidence: "
-            f"{requirement_result.insufficient_claims}",
+            (
+                "Claims with insufficient evidence: "
+                f"{requirement_result.insufficient_claims}"
+            ),
             f"Failed claims: {requirement_result.failed_claims}",
         ]
 
@@ -122,9 +115,7 @@ class AssuranceExplanationEngine:
         )
 
     def _explain_failed(self, requirement_result) -> AssuranceExplanation:
-        """
-        Explain a failed requirement.
-        """
+        """Explain a failed requirement."""
 
         failed_claims = [
             claim_result.claim_id
@@ -141,8 +132,10 @@ class AssuranceExplanationEngine:
             details=[
                 f"Failed claims: {', '.join(failed_claims)}",
                 f"Verified claims: {requirement_result.verified_claims}",
-                f"Claims with insufficient evidence: "
-                f"{requirement_result.insufficient_claims}",
+                (
+                    "Claims with insufficient evidence: "
+                    f"{requirement_result.insufficient_claims}"
+                ),
             ],
             recommendations=[
                 "Investigate failed claims and review operational reality.",
