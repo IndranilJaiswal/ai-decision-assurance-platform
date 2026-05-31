@@ -193,3 +193,14 @@ Status: In Progress
 - Requirement assurance rollup
 - SERVICE_HEALTHY assurance
 - Dashboard v1
+
+### Completed
+
+- Requirement assurance rollup model
+- Requirement assurance engine
+- Multi-claim requirement evaluation
+
+### Next
+
+- Dashboard v1
+- SERVICE_HEALTHY evidence expansion

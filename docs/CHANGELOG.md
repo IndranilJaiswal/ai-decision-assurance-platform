@@ -225,3 +225,27 @@ Claim
 Evidence Collection
 ↓
 Assurance Result
+
+## 2026-05-31
+
+### Added
+
+- RequirementAssuranceResult model
+- RequirementAssuranceEngine
+- Multi-claim requirement rollup test
+
+### Purpose
+
+Introduced requirement-level assurance.
+
+The platform can now roll supporting claim assurance results into a business-level requirement status.
+
+### Architecture Impact
+
+Requirement
+↓
+Claims
+↓
+Claim Assurance Results
+↓
+Requirement Assurance Result

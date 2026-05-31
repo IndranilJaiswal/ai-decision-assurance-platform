@@ -537,3 +537,26 @@ Loads requirements from configuration.
 Evaluates evidence records against approved claims.
 
 Phase 1C currently supports SERVICE_EXISTS.
+## Requirement Assurance Rollup
+
+Purpose:
+
+Rolls multiple claim assurance results into a requirement-level assurance result.
+
+Rules:
+
+- Any FAILED claim results in FAILED.
+- Any INSUFFICIENT_EVIDENCE claim results in PARTIALLY_ASSURED.
+- All VERIFIED claims results in VERIFIED.
+
+---
+
+## requirement_assurance_models.py
+
+Defines requirement-level assurance result objects.
+
+---
+
+## requirement_assurance_engine.py
+
+Evaluates requirement status from supporting claim results.
