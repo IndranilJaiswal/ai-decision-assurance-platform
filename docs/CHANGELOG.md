@@ -137,3 +137,45 @@ Evidence Collection
 ### Verified
 
 - SERVICE_EXISTS can be tested against live Dynatrace service reality
+## 2026-05-31
+
+### Improved
+
+- Runtime reality normalization
+- Filtering of Dynatrace technical services
+- Live Dynatrace provider now returns business-relevant services
+
+### Verified
+
+- SERVICE_EXISTS can be evaluated against live Dynatrace runtime reality
+
+### Architecture Impact
+
+Claim
+↓
+Evidence Request
+↓
+Dynatrace Runtime Reality
+↓
+Evidence Record
+
+### Added
+
+- EvidenceCollectionEngine
+- End-to-End Evidence Collection Test
+
+### Purpose
+
+Introduced orchestration for evidence collection.
+
+The platform can now collect evidence for approved claims through a reusable pipeline.
+
+### Architecture Impact
+
+Approved Claim
+↓
+Evidence Collection Engine
+↓
+Evidence Requests
+↓
+Evidence Records

@@ -451,3 +451,44 @@ Future Validation:
 - SERVICE_HEALTHY
 - NO_ACTIVE_PROBLEMS
 - DEPENDENCY_EXISTS
+## Live Dynatrace Validation
+
+Current Supported Validation:
+
+SERVICE_EXISTS
+
+Flow:
+
+Approved Claim
+↓
+Evidence Request Builder
+↓
+Dynatrace Provider
+↓
+Runtime Reality
+↓
+Evidence Adapter
+↓
+Evidence Record
+
+Current Runtime Reality Source:
+
+Dynatrace SaaS Tenant
+
+Current Validated Service:
+
+easyTravel-Business
+
+## evidence_collection_engine.py
+
+Purpose:
+
+Coordinates evidence collection for approved claims.
+
+Responsibilities:
+
+- Generate evidence requests
+- Collect evidence
+- Return evidence records
+
+The engine does not perform assurance evaluation.
