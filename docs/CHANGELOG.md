@@ -460,3 +460,46 @@ Introduced separation between:
 * Assurance Execution
 
 This ensures policy agents cannot directly influence assurance outcomes without human review.
+
+## 2026-05-31
+
+### Added
+
+Dashboard Approval Workflow
+
+Files Updated
+
+* dashboard_v2/app.py
+
+### New Capability
+
+Human approval is now visible through the dashboard.
+
+Users can:
+
+* Review suggested claims
+* Approve claims
+* Define assurance scope
+* Execute assurance
+
+### Dashboard Workflow
+
+Requirement
+↓
+Policy Agent
+↓
+Suggested Claims
+↓
+Human Approval
+↓
+Approved Claims
+↓
+Evidence Collection
+↓
+Assurance
+
+### Governance Improvement
+
+Approval decisions are now visible to users.
+
+Only approved claims participate in evidence collection and assurance evaluation.

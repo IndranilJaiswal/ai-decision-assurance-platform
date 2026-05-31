@@ -324,3 +324,54 @@ Updated Responsibilities
 Future
 
 Replace deterministic policy matching with LLM-assisted policy interpretation while preserving output compatibility.
+
+## dashboard_v2/app.py
+
+Purpose
+
+Provide an interactive assurance workflow dashboard.
+
+Current Capabilities
+
+Requirement Selection
+
+* Select requirement
+* View requirement details
+
+Policy Agent Integration
+
+* Display suggested claims
+* Display policy traceability
+* Display objective traceability
+
+Human Approval Workflow
+
+* Approve claims
+* Reject claims
+* Define assurance scope
+
+Assurance Execution
+
+* Execute evidence collection
+* Execute claim assurance
+* Execute requirement assurance
+
+Evidence Visualization
+
+* Evidence records
+* Evidence details
+* Evidence gaps
+
+Assurance Visualization
+
+* Requirement status
+* Claim status
+* Assurance explanations
+
+Future Capabilities
+
+* AI assurance explanation
+* Approval persistence
+* Approval audit trail
+* Multi-policy claim discovery
+* Standards-based claim discovery

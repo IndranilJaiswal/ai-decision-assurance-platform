@@ -1,21 +1,31 @@
 """
 AI Decision Assurance Platform Dashboard
 
-Dashboard v1 shows the full Build 1 flow:
+Purpose:
+Display the end-to-end assurance workflow.
+
+Current visible flow:
 
 Requirement
 ↓
-Supporting Claims
+Policy Agent
 ↓
-Evidence Records
+Suggested Claims
+↓
+Human Approval
+↓
+Approved Claims
+↓
+Evidence Collection
 ↓
 Claim Assurance
 ↓
 Requirement Assurance
 
-AI is not making the assurance decision here.
-The dashboard only displays deterministic assurance results
-produced by approved claims, collected evidence, and rules.
+Important:
+AI or policy agents suggest claims.
+Humans approve claims.
+Evidence and deterministic rules produce assurance.
 """
 
 import sys
@@ -24,12 +34,18 @@ from pathlib import Path
 import streamlit as st
 
 
-# Add backend/app_v2 to Python import path so Streamlit can use backend modules.
+# ---------------------------------------------------------------------------
+# Import backend modules
+# ---------------------------------------------------------------------------
+
 ROOT_DIR = Path(__file__).resolve().parents[1]
 APP_DIR = ROOT_DIR / "backend" / "app_v2"
+
 sys.path.append(str(APP_DIR))
 
 
+from availability_policy_agent import AvailabilityPolicyAgent
+from claim_approval_engine import ClaimApprovalEngine
 from claim_assurance_engine import ClaimAssuranceEngine
 from claim_library import load_claim_library
 from claim_models import ApprovedClaim
@@ -40,99 +56,24 @@ from requirement_assurance_engine import RequirementAssuranceEngine
 from requirement_library import load_requirements
 
 
+# ---------------------------------------------------------------------------
+# Streamlit page setup
+# ---------------------------------------------------------------------------
+
 st.set_page_config(
     page_title="AI Decision Assurance Platform",
     layout="wide",
 )
 
-
 st.title("AI Decision Assurance Platform")
-st.caption("Requirement → Claim → Evidence → Assurance")
+st.caption(
+    "Requirement → Policy Agent → Human Approval → Evidence → Assurance"
+)
 
 
-@st.cache_data(ttl=60)
-def run_assurance_pipeline():
-    """
-    Run the current end-to-end assurance pipeline.
-
-    Current flow:
-    1. Load requirements.
-    2. Load claim templates.
-    3. Collect live runtime reality from Dynatrace.
-    4. Create approved claims for each requirement.
-    5. Collect evidence for each approved claim.
-    6. Evaluate claim assurance.
-    7. Roll claim assurance into requirement assurance.
-    """
-
-    requirements = load_requirements()
-    claims = load_claim_library()
-
-    # Live runtime reality from Dynatrace.
-    provider = DynatraceProvider()
-    runtime_reality = provider.get_runtime_reality().to_dict()
-
-    # Evidence adapter works against normalized runtime reality.
-    adapter = DynatraceEvidenceAdapter(runtime_reality)
-    collection_engine = EvidenceCollectionEngine(adapter)
-
-    claim_assurance_engine = ClaimAssuranceEngine()
-    requirement_assurance_engine = RequirementAssuranceEngine()
-
-    results = []
-
-    for requirement in requirements:
-
-        claim_results = []
-        evidence_by_claim = {}
-
-        for claim_id in requirement.claim_ids:
-
-            # Resolve claim template from claim library.
-            claim = next(
-                claim
-                for claim in claims
-                if claim.claim_id == claim_id
-            )
-
-            # For Build 1, all claims target the easyTravel business service.
-            # Later this should come from requirement configuration or UI input.
-            approved_claim = ApprovedClaim(
-                claim=claim,
-                target_name="easyTravel-Business",
-                thresholds={},
-            )
-
-            # Collect evidence required by the approved claim.
-            evidence_records = collection_engine.collect_evidence(
-                approved_claim
-            )
-
-            # Evaluate claim assurance from evidence records.
-            claim_result = claim_assurance_engine.evaluate(
-                approved_claim,
-                evidence_records
-            )
-
-            claim_results.append(claim_result)
-            evidence_by_claim[claim_id] = evidence_records
-
-        # Roll claim assurance results up to requirement assurance.
-        requirement_result = requirement_assurance_engine.evaluate(
-            requirement,
-            claim_results
-        )
-
-        results.append(
-            {
-                "requirement": requirement,
-                "requirement_result": requirement_result,
-                "evidence_by_claim": evidence_by_claim,
-            }
-        )
-
-    return results
-
+# ---------------------------------------------------------------------------
+# Helper functions
+# ---------------------------------------------------------------------------
 
 def status_badge(status: str) -> str:
     """Return readable status label with icon."""
@@ -152,32 +93,86 @@ def status_badge(status: str) -> str:
     return status
 
 
-def render_summary(results):
-    """Render top-level dashboard summary metrics."""
+def get_claim_by_id(claims, claim_id):
+    """Return a claim template from the claim library."""
 
-    verified_count = sum(
-        1
-        for item in results
-        if item["requirement_result"].status == "VERIFIED"
+    return next(
+        claim
+        for claim in claims
+        if claim.claim_id == claim_id
     )
 
-    partial_count = sum(
-        1
-        for item in results
-        if item["requirement_result"].status == "PARTIALLY_ASSURED"
+
+@st.cache_data(ttl=60)
+def load_runtime_reality():
+    """
+    Load live runtime reality from Dynatrace.
+
+    This is cached briefly so the dashboard does not call Dynatrace
+    on every small UI interaction.
+    """
+
+    provider = DynatraceProvider()
+    return provider.get_runtime_reality().to_dict()
+
+
+def run_assurance_for_requirement(requirement, approved_claim_ids):
+    """
+    Run assurance only for human-approved claims.
+
+    This is the key governance boundary:
+    suggested claims do not enter assurance until approved.
+    """
+
+    claims = load_claim_library()
+    runtime_reality = load_runtime_reality()
+
+    adapter = DynatraceEvidenceAdapter(runtime_reality)
+    collection_engine = EvidenceCollectionEngine(adapter)
+
+    claim_assurance_engine = ClaimAssuranceEngine()
+    requirement_assurance_engine = RequirementAssuranceEngine()
+
+    claim_results = []
+    evidence_by_claim = {}
+
+    for claim_id in approved_claim_ids:
+
+        claim = get_claim_by_id(
+            claims,
+            claim_id,
+        )
+
+        # Build 1 targets easyTravel-Business.
+        # Future versions should allow target selection per requirement.
+        approved_claim = ApprovedClaim(
+            claim=claim,
+            target_name="easyTravel-Business",
+            thresholds={},
+        )
+
+        evidence_records = collection_engine.collect_evidence(
+            approved_claim
+        )
+
+        claim_result = claim_assurance_engine.evaluate(
+            approved_claim,
+            evidence_records,
+        )
+
+        claim_results.append(claim_result)
+        evidence_by_claim[claim_id] = evidence_records
+
+    requirement_result = requirement_assurance_engine.evaluate(
+        requirement,
+        claim_results,
     )
 
-    failed_count = sum(
-        1
-        for item in results
-        if item["requirement_result"].status == "FAILED"
-    )
-
-    col1, col2, col3 = st.columns(3)
-
-    col1.metric("Verified Requirements", verified_count)
-    col2.metric("Partially Assured", partial_count)
-    col3.metric("Failed Requirements", failed_count)
+    return {
+        "requirement": requirement,
+        "requirement_result": requirement_result,
+        "evidence_by_claim": evidence_by_claim,
+    }
 
 
 def render_evidence_records(evidence_records):
@@ -196,6 +191,7 @@ def render_evidence_records(evidence_records):
         evidence_col3.write(f"**Observed:** `{evidence.observed}`")
 
         st.markdown("**Evidence Details**")
+
         st.json(
             {
                 "value": evidence.value,
@@ -205,7 +201,7 @@ def render_evidence_records(evidence_records):
 
 
 def render_claim_result(claim_result, evidence_by_claim):
-    """Render one claim assurance result and its evidence."""
+    """Render claim-level assurance and evidence."""
 
     with st.expander(
         f"{claim_result.claim_id} — {status_badge(claim_result.status)}",
@@ -231,18 +227,20 @@ def render_claim_result(claim_result, evidence_by_claim):
 
         evidence_records = evidence_by_claim.get(
             claim_result.claim_id,
-            []
+            [],
         )
 
         render_evidence_records(evidence_records)
 
 
-def render_requirement(item):
-    """Render one requirement with claim, evidence, and assurance detail."""
+def render_requirement_result(item):
+    """Render requirement-level assurance result."""
 
     requirement = item["requirement"]
     requirement_result = item["requirement_result"]
     evidence_by_claim = item["evidence_by_claim"]
+
+    st.markdown("## Requirement Assurance Result")
 
     with st.container(border=True):
 
@@ -250,43 +248,156 @@ def render_requirement(item):
         st.write(requirement.description)
 
         st.markdown(
-            f"### Requirement Status: {status_badge(requirement_result.status)}"
+            f"### Requirement Status: "
+            f"{status_badge(requirement_result.status)}"
         )
 
         st.info(requirement_result.explanation)
 
-        summary_col1, summary_col2, summary_col3 = st.columns(3)
+        col1, col2, col3 = st.columns(3)
 
-        summary_col1.metric(
+        col1.metric(
             "Verified Claims",
             requirement_result.verified_claims,
         )
 
-        summary_col2.metric(
+        col2.metric(
             "Insufficient Evidence",
             requirement_result.insufficient_claims,
         )
 
-        summary_col3.metric(
+        col3.metric(
             "Failed Claims",
             requirement_result.failed_claims,
         )
 
-        st.markdown("#### Supporting Claims, Evidence & Assurance")
+        st.markdown("#### Claim Assurance Detail")
 
         for claim_result in requirement_result.claim_results:
+
             render_claim_result(
                 claim_result,
                 evidence_by_claim,
             )
 
 
-# Run pipeline and render dashboard.
-results = run_assurance_pipeline()
+# ---------------------------------------------------------------------------
+# Main dashboard
+# ---------------------------------------------------------------------------
 
-render_summary(results)
+requirements = load_requirements()
 
-st.divider()
+selected_requirement = st.selectbox(
+    "Select Requirement",
+    requirements,
+    format_func=lambda requirement: (
+        f"{requirement.requirement_id} - {requirement.title}"
+    ),
+)
 
-for item in results:
-    render_requirement(item)
+st.markdown("## Requirement")
+st.write(selected_requirement.description)
+
+
+# ---------------------------------------------------------------------------
+# Policy agent claim discovery
+# ---------------------------------------------------------------------------
+
+st.markdown("## Policy Agent Suggested Claims")
+
+policy_agent = AvailabilityPolicyAgent()
+
+suggestions = policy_agent.suggest_claims(
+    selected_requirement.title
+)
+
+approval_engine = ClaimApprovalEngine()
+
+selected_claim_ids = []
+
+for suggestion in suggestions:
+
+    with st.container(border=True):
+
+        col1, col2 = st.columns([1, 3])
+
+        with col1:
+            selected = st.checkbox(
+                suggestion.claim_id,
+                value=suggestion.claim_id in selected_requirement.claim_ids,
+                key=(
+                    f"{selected_requirement.requirement_id}_"
+                    f"{suggestion.claim_id}"
+                ),
+            )
+
+        with col2:
+            st.write(f"**Policy:** {suggestion.policy_name}")
+            st.write(f"**Policy ID:** `{suggestion.policy_id}`")
+            st.write(f"**Objective:** `{suggestion.objective_id}`")
+            st.write(suggestion.objective_description)
+
+        if selected:
+            selected_claim_ids.append(suggestion.claim_id)
+
+
+# ---------------------------------------------------------------------------
+# Human approval
+# ---------------------------------------------------------------------------
+
+st.markdown("## Human Approval")
+
+if st.button("Approve Selected Claims"):
+
+    approved_suggestions = approval_engine.approve_claims(
+        suggestions=suggestions,
+        approved_claim_ids=selected_claim_ids,
+    )
+
+    st.session_state["approved_claim_ids"] = [
+        suggestion.claim_id
+        for suggestion in approved_suggestions
+    ]
+
+    st.success(
+        "Approved claims: "
+        + ", ".join(st.session_state["approved_claim_ids"])
+    )
+
+
+approved_claim_ids = st.session_state.get(
+    "approved_claim_ids",
+    selected_requirement.claim_ids,
+)
+
+st.markdown("### Current Assurance Scope")
+
+if approved_claim_ids:
+    st.write(", ".join(approved_claim_ids))
+else:
+    st.warning("No claims approved yet.")
+
+
+# ---------------------------------------------------------------------------
+# Assurance execution
+# ---------------------------------------------------------------------------
+
+if approved_claim_ids:
+
+    if st.button("Run Assurance"):
+
+        result = run_assurance_for_requirement(
+            selected_requirement,
+            approved_claim_ids,
+        )
+
+        st.session_state["last_assurance_result"] = result
+
+
+if "last_assurance_result" in st.session_state:
+
+    st.divider()
+
+    render_requirement_result(
+        st.session_state["last_assurance_result"]
+    )

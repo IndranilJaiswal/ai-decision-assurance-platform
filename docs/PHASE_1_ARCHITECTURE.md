@@ -848,3 +848,89 @@ Dashboard approval workflow with:
 * Claim approval
 * Claim rejection
 * Approval audit history
+
+## Phase 2C – Dashboard Approval Workflow
+
+### Purpose
+
+Make claim approval visible and interactive through the dashboard.
+
+Prior phases introduced:
+
+* Policy Agent Claim Discovery
+* Human Approval Workflow
+
+Phase 2C exposes these capabilities through the user interface.
+
+### Architecture
+
+Requirement
+↓
+Policy Agent
+↓
+Suggested Claims
+↓
+Dashboard Approval
+↓
+Approved Claims
+↓
+Evidence Collection
+↓
+Claim Assurance
+↓
+Requirement Assurance
+↓
+Dashboard
+
+### Dashboard Responsibilities
+
+Display Requirements
+
+* Requirement ID
+* Requirement Title
+* Requirement Description
+
+Display Suggested Claims
+
+* Claim ID
+* Policy Reference
+* Objective Reference
+* Rationale
+
+Support Human Approval
+
+* Approve claims
+* Reject claims
+* Define assurance scope
+
+Display Approved Claims
+
+* Current assurance scope
+* Approved claim list
+
+Display Assurance Results
+
+* Requirement assurance
+* Claim assurance
+* Evidence records
+* Evidence gaps
+* Assurance explanations
+
+### Governance Principle
+
+Policy Agents suggest claims.
+
+Humans approve claims.
+
+Only approved claims enter assurance scope.
+
+### Future Evolution
+
+Dashboard approval decisions will be persisted and auditable.
+
+Future capabilities:
+
+* Approval history
+* Reviewer identity
+* Approval timestamps
+* Multi-stage approval workflows
