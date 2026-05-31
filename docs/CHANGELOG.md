@@ -366,3 +366,50 @@ Claim
 Evidence Coverage
 ↓
 Assurance
+
+## 2026-05-31
+
+### Added
+
+Policy Agent Claim Discovery
+
+Files Added
+
+* policy_models.py
+* policy_loader.py
+* availability_policy_agent.py
+* test_policy_agent.py
+* service_availability_policy.yaml
+
+### New Capability
+
+Requirements can now be mapped to candidate claims through approved organizational policies.
+
+Example
+
+Requirement
+
+Customer booking service must remain available.
+
+Suggested Claims
+
+* SERVICE_EXISTS
+* SERVICE_HEALTHY
+* NO_ACTIVE_PROBLEMS
+
+### Traceability
+
+Every suggested claim includes:
+
+* Policy ID
+* Policy Name
+* Objective ID
+* Objective Description
+
+### Assurance Boundary
+
+Policy Agents suggest claims.
+
+Human reviewers approve claims.
+
+Assurance remains evidence-driven and deterministic.

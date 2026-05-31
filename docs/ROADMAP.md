@@ -282,3 +282,59 @@ VERIFIED
 or
 
 FAILED
+
+## Completed
+
+### Phase 2A – Policy Agent Claim Discovery
+
+Implemented:
+
+* Policy model
+* Policy objective model
+* Policy loader
+* Availability Policy Agent
+* Policy-based claim suggestions
+* Policy traceability
+
+Current Capability
+
+Requirement
+↓
+Policy Agent
+↓
+Suggested Claims
+
+Output includes:
+
+* Claim ID
+* Policy ID
+* Policy Name
+* Objective ID
+* Objective Description
+
+---
+
+## Next
+
+### Phase 2B – Human Approval Workflow
+
+Objectives
+
+* Review suggested claims
+* Approve candidate claims
+* Reject candidate claims
+* Generate approved claim set
+
+Expected Architecture
+
+Requirement
+↓
+Policy Agent
+↓
+Suggested Claims
+↓
+Human Approval
+↓
+Approved Claims
+↓
+Evidence Collection

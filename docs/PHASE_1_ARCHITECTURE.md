@@ -692,3 +692,84 @@ Evidence Coverage Evaluation
 Claim Assurance
 ↓
 Requirement Assurance
+
+## Phase 2A – Policy Agent Claim Discovery
+
+### Purpose
+
+Introduce policy-driven claim discovery.
+
+Requirements are no longer mapped directly to claims by a human.
+
+Instead, approved organizational policies are used to suggest candidate claims.
+
+### Architecture
+
+Requirement
+↓
+Policy Agent
+↓
+Suggested Claims
+↓
+Human Approval
+↓
+Approved Claims
+↓
+Evidence Collection
+↓
+Assurance Engine
+↓
+Requirement Assurance
+
+### Responsibilities
+
+Policy Agent
+
+* Load approved organizational policies
+* Interpret policy objectives
+* Suggest candidate claims
+* Attach policy references
+
+Human Reviewer
+
+* Approve claims
+* Reject claims
+* Define assurance scope
+
+Assurance Engine
+
+* Collect evidence
+* Evaluate claims
+* Determine assurance status
+
+### Important Principles
+
+Policy Agents:
+
+* Suggest claims
+* Provide traceability
+* Provide rationale
+
+Policy Agents do not:
+
+* Approve claims
+* Collect evidence
+* Perform assurance
+
+### Future Evolution
+
+Current:
+
+Deterministic Policy Agent
+
+Future:
+
+LLM-Assisted Policy Agent
+
+The output contract remains unchanged:
+
+Requirement
+↓
+Suggested Claims
+↓
+Policy References

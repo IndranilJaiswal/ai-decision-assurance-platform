@@ -177,3 +177,80 @@ Placeholder Evidence Types
 Future Role
 
 Provide live runtime metrics from Dynatrace for health assurance.
+
+## policy_models.py
+
+Purpose
+
+Represents organizational policies and objectives.
+
+Contains
+
+* Policy
+* PolicyObjective
+
+---
+
+## policy_loader.py
+
+Purpose
+
+Loads policy definitions from YAML.
+
+Responsibilities
+
+* Parse YAML
+* Create Policy models
+* Create PolicyObjective models
+
+---
+
+## availability_policy_agent.py
+
+Purpose
+
+Translate policy objectives into candidate assurance claims.
+
+Responsibilities
+
+* Load approved policy definitions
+* Suggest candidate claims
+* Attach policy references
+
+Does Not
+
+* Approve claims
+* Collect evidence
+* Perform assurance
+
+Future
+
+Replace deterministic logic with LLM-assisted policy reasoning.
+
+---
+
+## service_availability_policy.yaml
+
+Purpose
+
+Defines organizational availability objectives.
+
+Current Objectives
+
+* Services must exist
+* Services must remain healthy
+* Services should not have active operational issues
+
+---
+
+## test_policy_agent.py
+
+Purpose
+
+Validate policy-based claim discovery.
+
+Expected Output
+
+* Suggested claims
+* Policy references
+* Objective traceability

@@ -54,3 +54,66 @@ class DynatraceClient:
         response.raise_for_status()
 
         return response.json()
+
+    def get_metrics(self, metric_selector: str, page_size: int = 100) -> dict:
+        """
+        Fetch Dynatrace metric descriptors.
+
+        Used first for discovery so we do not hardcode metric IDs blindly.
+        """
+
+        url = f"{self.base_url}/api/v2/metrics"
+
+        params = {
+            "metricSelector": metric_selector,
+            "pageSize": page_size,
+        }
+
+        response = requests.get(
+            url,
+            headers=self.headers,
+            params=params,
+            timeout=30,
+        )
+
+        response.raise_for_status()
+
+        return response.json()
+
+    def query_metric_data(
+        self,
+        metric_selector: str,
+        entity_selector: str | None = None,
+        from_time: str = "now-30m",
+        to_time: str = "now",
+        resolution: str = "Inf",
+    ) -> dict:
+        """
+        Query metric data from Dynatrace.
+
+        This will later be used to collect response_time and failure_rate
+        evidence for SERVICE_HEALTHY.
+        """
+
+        url = f"{self.base_url}/api/v2/metrics/query"
+
+        params = {
+            "metricSelector": metric_selector,
+            "from": from_time,
+            "to": to_time,
+            "resolution": resolution,
+        }
+
+        if entity_selector:
+            params["entitySelector"] = entity_selector
+
+        response = requests.get(
+            url,
+            headers=self.headers,
+            params=params,
+            timeout=30,
+        )
+
+        response.raise_for_status()
+
+        return response.json()
