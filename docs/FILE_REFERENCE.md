@@ -1,0 +1,139 @@
+# File Reference
+
+## claim_library.py
+
+Purpose:
+Loads approved claim definitions from the claim library.
+
+Role:
+Requirement → Claim mapping.
+
+---
+
+## claim_models.py
+
+Purpose:
+Defines claim-related data models.
+
+Role:
+Standardized claim representation.
+
+---
+
+## evidence_request_builder.py
+
+Purpose:
+Determines which evidence is required for a claim.
+
+Role:
+Claim → Evidence mapping.
+
+---
+
+## evidence_collection_engine.py
+
+Purpose:
+Collects evidence records from configured evidence adapters.
+
+Role:
+Evidence acquisition.
+
+---
+
+## dynatrace_adapter.py
+
+Purpose:
+Converts Dynatrace runtime reality into evidence records.
+
+Role:
+Evidence source adapter.
+
+---
+
+## dynatrace_provider.py
+
+Purpose:
+Retrieves runtime reality from Dynatrace APIs.
+
+Role:
+Reality collection.
+
+---
+
+## reality_provider.py
+
+Purpose:
+Abstract interface for runtime reality providers.
+
+Role:
+Provider abstraction.
+
+---
+
+## mock_dynatrace_provider.py
+
+Purpose:
+Test provider used when Dynatrace is unavailable.
+
+Role:
+Development and testing.
+
+---
+
+## claim_assurance_engine.py
+
+Purpose:
+Evaluates evidence against claim requirements.
+
+Role:
+Claim assurance.
+
+---
+
+## requirement_assurance_engine.py
+
+Purpose:
+Rolls claim assurance results into requirement assurance.
+
+Role:
+Requirement assurance.
+
+---
+
+## requirement_assurance_models.py
+
+Purpose:
+Defines requirement assurance result objects.
+
+Role:
+Business-level assurance.
+
+---
+
+## dashboard_v2/app.py
+
+Purpose:
+Displays requirements, claims, evidence, and assurance results.
+
+Role:
+User interface.
+
+---
+
+## config/claim_library.yaml
+
+Purpose:
+Stores approved claim definitions.
+
+Role:
+Claim catalog.
+
+---
+
+## config/capability_matrix.yaml
+
+Purpose:
+Maps evidence types to supporting platforms.
+
+Role:
+Evidence capability mapping.
