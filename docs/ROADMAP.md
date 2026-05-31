@@ -204,3 +204,14 @@ Status: In Progress
 
 - Dashboard v1
 - SERVICE_HEALTHY evidence expansion
+
+### Completed
+
+- Dashboard v1
+- End-to-end requirement assurance visualization
+
+### Next
+
+- Improve visual layout
+- Add SERVICE_HEALTHY metrics evidence
+- Add requirement selection

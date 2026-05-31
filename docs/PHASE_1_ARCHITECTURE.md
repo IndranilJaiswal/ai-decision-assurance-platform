@@ -560,3 +560,23 @@ Defines requirement-level assurance result objects.
 ## requirement_assurance_engine.py
 
 Evaluates requirement status from supporting claim results.
+
+## Dashboard v1
+
+Purpose:
+
+Displays the end-to-end assurance flow.
+
+Shows:
+
+- Requirements
+- Requirement assurance status
+- Supporting claims
+- Claim assurance status
+- Evidence records
+- Missing evidence
+- Explanation
+
+Current dashboard:
+
+dashboard_v2/app.py

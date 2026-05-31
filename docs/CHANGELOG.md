@@ -249,3 +249,25 @@ Claims
 Claim Assurance Results
 ↓
 Requirement Assurance Result
+
+## 2026-05-31
+
+### Added
+
+- Streamlit Dashboard v1
+- Requirement assurance summary
+- Claim evidence drill-down
+
+### Purpose
+
+Introduced the first visible product interface.
+
+The platform can now display Requirement → Claim → Evidence → Assurance in a browser.
+
+### Architecture Impact
+
+Backend assurance pipeline
+↓
+Dashboard
+↓
+Human-readable assurance view
