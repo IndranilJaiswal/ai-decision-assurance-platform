@@ -50,3 +50,24 @@ Dynatrace
 
 Evidence Record:
 Service observed or not observed
+
+## Phase 1B - Evidence Collection
+
+Status: In Progress
+
+### Completed
+
+- Evidence Record Model
+- Dynatrace Evidence Adapter
+- Service Existence Evidence Collection
+
+### In Progress
+
+- Failure Rate Evidence
+- Response Time Evidence
+- Problem Evidence
+
+### Remaining
+
+- Evidence Collection Engine
+- Assurance Integration

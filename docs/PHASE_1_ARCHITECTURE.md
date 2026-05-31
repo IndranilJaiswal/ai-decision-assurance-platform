@@ -242,3 +242,60 @@ SERVICE_HEALTHY
 service_exists
 failure_rate
 response_time
+## evidence_records.py
+
+Defines evidence records collected from reality sources.
+
+Purpose:
+
+Represents observable facts collected from external systems.
+
+Example:
+
+Service Exists
+↓
+Observed = True
+
+Evidence records do not make assurance decisions.
+
+They only record reality.
+
+---
+
+## dynatrace_adapter.py
+
+Collects evidence from Dynatrace.
+
+Purpose:
+
+Transforms evidence requests into evidence records.
+
+Example:
+
+Evidence Request:
+service_exists
+
+↓
+
+Dynatrace Service Lookup
+
+↓
+
+Evidence Record
+
+Observed = True
+
+---
+
+Current Evidence Sources
+
+Phase 1:
+
+- Dynatrace
+
+Future:
+
+- AWS
+- Azure
+- Kubernetes
+- ServiceNow
