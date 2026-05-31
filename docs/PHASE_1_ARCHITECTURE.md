@@ -1020,3 +1020,71 @@ Future
 LLM-assisted explanation generation.
 
 The explanation contract remains unchanged.
+
+## Phase 3B – Dashboard Assurance Explanation Integration
+
+### Purpose
+
+Expose assurance explanations directly in the dashboard.
+
+Phase 3A introduced the Assurance Explanation Engine.
+
+Phase 3B makes explanations visible to users.
+
+### Architecture
+
+Requirement
+↓
+Policy Agent
+↓
+Suggested Claims
+↓
+Dashboard Approval
+↓
+Approved Claims
+↓
+Evidence Collection
+↓
+Claim Assurance
+↓
+Requirement Assurance
+↓
+Assurance Explanation Engine
+↓
+Dashboard Explanation Panel
+
+### Responsibilities
+
+Dashboard
+
+* Display assurance status
+* Display claim assurance
+* Display evidence records
+* Display assurance explanations
+* Display recommendations
+
+Assurance Explanation Engine
+
+* Explain assurance outcomes
+* Explain evidence gaps
+* Explain failed claims
+* Recommend next actions
+
+### User Experience
+
+Users can now see:
+
+* Requirement status
+* Claim status
+* Evidence details
+* Explanation summary
+* Supporting details
+* Recommended actions
+
+### Governance Principle
+
+Assurance remains deterministic.
+
+Explanations provide interpretation only.
+
+Explanations do not modify assurance outcomes.

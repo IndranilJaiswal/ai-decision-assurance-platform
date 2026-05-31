@@ -601,3 +601,45 @@ Recommendations
 The explanation engine does not influence assurance outcomes.
 
 It explains outcomes already produced by the assurance system.
+
+## 2026-05-31
+
+### Added
+
+Dashboard Assurance Explanation Integration
+
+Files Updated
+
+* dashboard_v2/app.py
+
+### New Capability
+
+Assurance explanations are now visible directly in the dashboard.
+
+Dashboard Additions
+
+* Explanation title
+* Explanation summary
+* Explanation details
+* Recommendations
+
+### Example
+
+Requirement Status
+
+PARTIALLY_ASSURED
+
+Explanation
+
+The requirement is partially assured because some supporting claims could not be justified due to missing evidence.
+
+Recommendations
+
+* Collect response time evidence
+* Collect failure rate evidence
+
+### User Impact
+
+Users no longer need to interpret raw assurance outputs.
+
+The platform now explains assurance outcomes directly.

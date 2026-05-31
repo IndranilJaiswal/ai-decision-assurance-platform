@@ -601,3 +601,69 @@ Objectives
 * Business impact narratives
 * Audience-specific explanations
 * Natural language recommendations
+
+## Completed
+
+### Phase 3B – Dashboard Assurance Explanation Integration
+
+Implemented
+
+* Dashboard explanation panel
+* Explanation summary display
+* Explanation detail display
+* Recommendation display
+
+Current Flow
+
+Requirement
+↓
+Policy Agent
+↓
+Human Approval
+↓
+Evidence Collection
+↓
+Claim Assurance
+↓
+Requirement Assurance
+↓
+Assurance Explanation
+↓
+Dashboard
+
+Current User Experience
+
+Users can:
+
+* Review requirement assurance
+* Review claim assurance
+* Review evidence records
+* Review explanations
+* Review recommendations
+
+---
+
+## Next
+
+### Phase 4A – Standards Agent Framework
+
+Objectives
+
+* Introduce standards-based claim discovery
+* Support IEC 62443 mappings
+* Support NIST mappings
+* Support ISO mappings
+
+Expected Architecture
+
+Requirement
+↓
+Policy Agent
+↓
+Standards Agents
+↓
+Claim Synthesis
+↓
+Human Approval
+↓
+Assurance
