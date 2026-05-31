@@ -271,3 +271,39 @@ Backend assurance pipeline
 Dashboard
 ↓
 Human-readable assurance view
+
+## 2026-05-31
+
+### Added
+
+- Dashboard v1 enhancements
+- Evidence record visualization
+- Claim assurance explanation display
+- Missing evidence display
+
+### Purpose
+
+Makes the Requirement → Claim → Evidence → Assurance
+flow visible to users.
+
+### Architecture Impact
+
+Before
+
+Requirement
+↓
+Claims
+↓
+Assurance
+
+After
+
+Requirement
+↓
+Claims
+↓
+Evidence
+↓
+Assurance
+↓
+Dashboard

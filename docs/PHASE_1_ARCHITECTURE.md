@@ -580,3 +580,34 @@ Shows:
 Current dashboard:
 
 dashboard_v2/app.py
+
+## Dashboard v1
+
+Purpose
+
+Provides visibility into the full assurance workflow.
+
+Flow
+
+Requirement
+↓
+Claims
+↓
+Evidence Records
+↓
+Claim Assurance
+↓
+Requirement Assurance
+
+Displayed Information
+
+- Requirement status
+- Supporting claims
+- Evidence records
+- Assurance explanations
+- Missing evidence
+- Claim confidence
+
+Implementation
+
+dashboard_v2/app.py

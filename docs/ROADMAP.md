@@ -215,3 +215,17 @@ Status: In Progress
 - Improve visual layout
 - Add SERVICE_HEALTHY metrics evidence
 - Add requirement selection
+
+## Completed
+
+- Streamlit Dashboard v1
+- Requirement assurance visualization
+- Claim evidence visibility
+- Assurance explanation visibility
+
+## Next
+
+- SERVICE_HEALTHY claim
+- Response time evidence
+- Failure rate evidence
+- Evidence gap detection
