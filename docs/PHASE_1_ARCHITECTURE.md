@@ -210,3 +210,35 @@ Future:
 □ Dynatrace Evidence Adapters
 
 □ Decision Assurance Dashboard
+## evidence_models.py
+
+Defines evidence request objects.
+
+Purpose:
+
+Represents the observable facts required
+to evaluate a claim.
+
+---
+
+## evidence_request_builder.py
+
+Converts approved claims into evidence requests.
+
+Purpose:
+
+Creates the bridge between:
+
+Claim
+↓
+Evidence
+
+Example:
+
+SERVICE_HEALTHY
+
+↓
+
+service_exists
+failure_rate
+response_time
