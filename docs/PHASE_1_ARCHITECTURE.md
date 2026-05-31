@@ -1088,3 +1088,43 @@ Assurance remains deterministic.
 Explanations provide interpretation only.
 
 Explanations do not modify assurance outcomes.
+
+## Knowledge Layer (Phase 4A)
+
+Purpose:
+
+Provide a centralized knowledge repository used by the future Gemini
+Assurance Agent.
+
+The knowledge layer stores:
+
+- Organization Policies
+- Standards
+- Technical Documentation
+- Claim Library
+- Remediation Library
+
+Technology:
+
+- MongoDB Atlas
+
+Current State:
+
+- Seeded through seed_knowledge_base.py
+
+Future State:
+
+- Documents uploaded through Knowledge Management UI
+- Automatic document ingestion
+- Chunking
+- Vector embeddings
+- Atlas Vector Search
+
+Relationship to Assurance:
+
+Requirement
+→ Knowledge Retrieval
+→ Gemini Assurance Agent
+→ Suggested Claims
+→ Human Approval
+→ Assurance

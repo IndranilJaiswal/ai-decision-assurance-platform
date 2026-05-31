@@ -667,3 +667,21 @@ Claim Synthesis
 Human Approval
 ↓
 Assurance
+
+## Phase 4A – MongoDB Knowledge Base
+
+Status: IN PROGRESS
+
+Completed
+
+✓ MongoDB Atlas provisioning
+✓ MongoDB Atlas connectivity
+✓ MongoDB client implementation
+✓ Knowledge base schema
+✓ Knowledge base seed script
+
+Next
+
+□ Knowledge retrieval layer
+□ Atlas Vector Search
+□ Gemini Assurance Agent
