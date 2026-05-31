@@ -462,3 +462,72 @@ Assurance
 AI Explanation
 ↓
 Dashboard
+
+## Completed
+
+### Phase 3A – Assurance Explanation Engine
+
+Implemented
+
+* Assurance explanation model
+* Assurance explanation engine
+* Deterministic explanation generation
+* Explanation recommendations
+
+Current Flow
+
+Requirement
+↓
+Policy Agent
+↓
+Human Approval
+↓
+Evidence
+↓
+Claim Assurance
+↓
+Requirement Assurance
+↓
+Assurance Explanation
+↓
+Dashboard
+
+Current Capabilities
+
+* Explain verified requirements
+* Explain partially assured requirements
+* Explain failed requirements
+* Recommend next actions
+
+---
+
+## Next
+
+### Phase 3B – Dashboard Explanation Integration
+
+Objectives
+
+* Display explanations in dashboard
+* Display recommendations
+* Display evidence gap reasoning
+
+Expected Architecture
+
+Requirement Assurance
+↓
+Assurance Explanation Engine
+↓
+Dashboard Explanation Panel
+
+---
+
+### Future
+
+Phase 3C – LLM-Assisted Assurance Explanation
+
+Objectives
+
+* Executive summaries
+* Business impact explanations
+* Natural language recommendations
+* Audience-specific explanations

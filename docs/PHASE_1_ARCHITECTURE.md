@@ -934,3 +934,89 @@ Future capabilities:
 * Reviewer identity
 * Approval timestamps
 * Multi-stage approval workflows
+
+## Phase 3A – Assurance Explanation Engine
+
+### Purpose
+
+Convert deterministic assurance results into human-readable explanations.
+
+The Assurance Engine determines assurance outcomes.
+
+The Assurance Explanation Engine explains those outcomes.
+
+### Architecture
+
+Requirement
+↓
+Policy Agent
+↓
+Suggested Claims
+↓
+Dashboard Approval
+↓
+Approved Claims
+↓
+Evidence Collection
+↓
+Claim Assurance
+↓
+Requirement Assurance
+↓
+Assurance Explanation Engine
+↓
+Dashboard
+
+### Responsibilities
+
+Assurance Engine
+
+* Evaluate evidence
+* Determine claim status
+* Determine requirement status
+
+Assurance Explanation Engine
+
+* Explain assurance outcomes
+* Explain evidence gaps
+* Explain failed claims
+* Generate recommendations
+
+### Important Principle
+
+Explanation does not determine assurance.
+
+Assurance remains evidence-based and deterministic.
+
+Explanation consumes assurance outcomes and converts them into understandable narratives.
+
+### Example
+
+Assurance Result
+
+PARTIALLY_ASSURED
+
+Evidence Gaps
+
+* response_time
+* failure_rate
+
+Explanation
+
+The requirement is partially assured.
+
+The service exists and is observable in operational reality.
+
+However, service health cannot currently be assured because response time and failure rate evidence are unavailable.
+
+### Future Evolution
+
+Current
+
+Deterministic explanation generation.
+
+Future
+
+LLM-assisted explanation generation.
+
+The explanation contract remains unchanged.
