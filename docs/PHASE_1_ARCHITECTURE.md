@@ -299,3 +299,50 @@ Future:
 - Azure
 - Kubernetes
 - ServiceNow
+## Legacy MVP Components
+
+### reality_engine.py
+
+Phase 0 MVP component.
+
+Purpose:
+
+Compare declared architecture against observed runtime topology.
+
+Produces:
+
+Truth Gap Report
+
+This component will remain supported for backward compatibility.
+
+Future versions will introduce dedicated reality providers.
+
+---
+
+### evidence_engine.py
+
+Phase 0 MVP component.
+
+Purpose:
+
+Convert truth gaps into evidence records.
+
+Future versions will introduce evidence collection directly from runtime sources.
+## reality_provider.py
+
+Provides normalized runtime reality.
+
+Purpose:
+
+Decouples evidence collection from external systems.
+
+Phase 1 Source:
+
+Dynatrace
+
+Future Sources:
+
+- AWS
+- Azure
+- Kubernetes
+- ServiceNow

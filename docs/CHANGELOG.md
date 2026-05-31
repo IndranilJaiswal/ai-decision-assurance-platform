@@ -48,3 +48,15 @@ Evidence Record
 ### Supported Evidence Types
 
 - service_exists
+
+### Added
+
+- RuntimeReality model
+- RealityProvider interface
+- Mock Dynatrace Provider
+
+### Purpose
+
+Introduced the Runtime Reality abstraction layer.
+
+Future evidence collection will operate on normalized runtime reality instead of direct platform integrations.
