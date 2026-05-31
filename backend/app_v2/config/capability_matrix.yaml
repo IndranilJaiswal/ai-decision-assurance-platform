@@ -1,0 +1,39 @@
+# Defines which claim types can be verified using Dynatrace evidence.
+# This is the contract between claims and the evidence engine.
+
+SERVICE_EXISTS:
+  source: dynatrace
+  entity_type: SERVICE
+  evidence:
+    - service_exists
+  verifiability: VERIFIABLE_BY_DYNATRACE
+
+SERVICE_HEALTHY:
+  source: dynatrace
+  entity_type: SERVICE
+  evidence:
+    - service_exists
+    - failure_rate
+    - response_time
+  verifiability: VERIFIABLE_BY_DYNATRACE
+
+CONTAINER_EXISTS:
+  source: dynatrace
+  entity_type: CONTAINER
+  evidence:
+    - container_exists
+  verifiability: VERIFIABLE_BY_DYNATRACE
+
+DEPENDENCY_EXISTS:
+  source: dynatrace
+  entity_type: SERVICE
+  evidence:
+    - dependency_exists
+  verifiability: VERIFIABLE_BY_DYNATRACE
+
+NO_ACTIVE_PROBLEMS:
+  source: dynatrace
+  entity_type: SERVICE
+  evidence:
+    - active_problems
+  verifiability: VERIFIABLE_BY_DYNATRACE

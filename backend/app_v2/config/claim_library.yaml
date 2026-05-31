@@ -1,0 +1,28 @@
+# Phase 1 claim library.
+# Claims are approved observable statements that can be assured using evidence.
+
+claims:
+  - claim_id: SERVICE_EXISTS
+    name: Service Exists
+    category: availability
+    description: Verifies that a required service is observed in Dynatrace.
+
+  - claim_id: SERVICE_HEALTHY
+    name: Service Healthy
+    category: availability
+    description: Verifies that a service exists and has acceptable health metrics.
+
+  - claim_id: CONTAINER_EXISTS
+    name: Container Exists
+    category: runtime
+    description: Verifies that a required container is observed in Dynatrace.
+
+  - claim_id: DEPENDENCY_EXISTS
+    name: Dependency Exists
+    category: topology
+    description: Verifies that an expected runtime dependency is observed.
+
+  - claim_id: NO_ACTIVE_PROBLEMS
+    name: No Active Problems
+    category: operations
+    description: Verifies that no active Dynatrace problems are associated with the entity.
