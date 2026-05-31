@@ -346,3 +346,69 @@ Future Sources:
 - Azure
 - Kubernetes
 - ServiceNow
+## Runtime Reality Layer
+
+Purpose:
+
+Provide a normalized representation of observed operational reality.
+
+The platform should not depend directly on vendor APIs.
+
+Instead, external systems are normalized into RuntimeReality.
+
+Benefits:
+
+- Decouples assurance logic from vendor implementations.
+- Supports multiple evidence sources.
+- Enables consistent evidence collection.
+
+Examples:
+
+- Dynatrace
+- AWS
+- Azure
+- Kubernetes
+- ServiceNow
+## Runtime Reality Layer
+
+Purpose:
+
+Provide a normalized representation of observed operational reality.
+
+The platform should not depend directly on vendor APIs.
+
+Instead, external systems are normalized into RuntimeReality.
+
+Benefits:
+
+- Decouples assurance logic from vendor implementations.
+- Supports multiple evidence sources.
+- Enables consistent evidence collection.
+
+Examples:
+
+- Dynatrace
+- AWS
+- Azure
+- Kubernetes
+- ServiceNow
+
+---
+
+## reality_provider.py
+
+Defines the RuntimeReality model and provider interface.
+
+Purpose:
+
+Create a standard representation of operational reality regardless of source.
+
+---
+
+## mock_dynatrace_provider.py
+
+Temporary Dynatrace implementation.
+
+Purpose:
+
+Allow development and testing of the Claim → Evidence flow before live Dynatrace API integration.
