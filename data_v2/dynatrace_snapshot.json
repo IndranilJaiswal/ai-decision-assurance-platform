@@ -1,0 +1,29 @@
+{
+  "observed_components": [
+    {
+      "name": "frontend",
+      "type": "application",
+      "source": "dynatrace"
+    },
+    {
+      "name": "api",
+      "type": "service",
+      "source": "dynatrace"
+    },
+    {
+      "name": "payments",
+      "type": "service",
+      "source": "dynatrace"
+    }
+  ],
+  "observed_dependencies": [
+    {
+      "from": "frontend",
+      "to": "api"
+    },
+    {
+      "from": "api",
+      "to": "payments"
+    }
+  ]
+}

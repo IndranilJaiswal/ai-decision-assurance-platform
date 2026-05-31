@@ -1,0 +1,8 @@
+[
+  {
+    "id": "AR-001",
+    "type": "architecture",
+    "statement": "Payments service must have a database dependency",
+    "criticality": "high"
+  }
+]

@@ -1,0 +1,34 @@
+{
+  "components": [
+    {
+      "name": "frontend",
+      "type": "application"
+    },
+    {
+      "name": "api",
+      "type": "service"
+    },
+    {
+      "name": "payments",
+      "type": "service"
+    },
+    {
+      "name": "postgresql",
+      "type": "database"
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "frontend",
+      "to": "api"
+    },
+    {
+      "from": "api",
+      "to": "payments"
+    },
+    {
+      "from": "payments",
+      "to": "postgresql"
+    }
+  ]
+}
