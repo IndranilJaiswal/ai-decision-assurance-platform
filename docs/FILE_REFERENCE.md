@@ -660,3 +660,62 @@ Examples:
 Used By:
 
 Remediation Agent
+
+### knowledge_models.py
+
+Purpose:
+
+Represent retrieved knowledge documents.
+
+Responsibilities:
+
+- KnowledgeDocument
+- RetrievedContext
+
+Must Not:
+
+- Access MongoDB
+- Perform retrieval
+- Call Gemini
+
+---
+
+### knowledge_retriever.py
+
+Purpose:
+
+Retrieve relevant knowledge from MongoDB.
+
+Responsibilities:
+
+- Search knowledge collections
+- Score documents
+- Return retrieved context
+
+Must Not:
+
+- Call Gemini
+- Generate claims
+- Perform assurance
+
+Future:
+
+Will evolve to Atlas Vector Search.
+
+---
+
+### test_knowledge_retriever.py
+
+Purpose:
+
+Verify retrieval functionality.
+
+Responsibilities:
+
+- Execute retrieval
+- Display retrieved documents
+
+Must Not:
+
+- Modify MongoDB
+- Call Gemini

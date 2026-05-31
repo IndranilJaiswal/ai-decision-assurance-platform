@@ -687,3 +687,27 @@ Atlas Vector Search
 
 Phase 4D:
 Gemini Assurance Agent
+
+## Phase 4B – Knowledge Retrieval Layer
+
+Summary:
+
+Introduced MongoDB-backed knowledge retrieval.
+
+Added:
+
+- KnowledgeDocument model
+- RetrievedContext model
+- KnowledgeRetriever
+
+Current Retrieval Strategy:
+
+- Title matching
+- Tag matching
+- Content matching
+
+Future Evolution:
+
+- Atlas Vector Search
+- Embeddings
+- Semantic Retrieval
