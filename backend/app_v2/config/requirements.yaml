@@ -1,0 +1,6 @@
+requirements:
+  - requirement_id: REQ-001
+    title: Customer booking service must exist
+    description: The customer booking service must be observable in runtime reality.
+    claim_ids:
+      - SERVICE_EXISTS

@@ -200,3 +200,28 @@ Evidence Collection Engine
 Evidence Requests
 ↓
 Evidence Records
+
+## 2026-05-31
+
+### Added
+
+- Requirement model
+- Requirement YAML configuration
+- Requirement loader
+- AssuranceResult model
+- ClaimAssuranceEngine
+- Requirement assurance test
+
+### Purpose
+
+Introduced the Requirement → Claim → Evidence → Assurance flow.
+
+### Architecture Impact
+
+Requirement
+↓
+Claim
+↓
+Evidence Collection
+↓
+Assurance Result

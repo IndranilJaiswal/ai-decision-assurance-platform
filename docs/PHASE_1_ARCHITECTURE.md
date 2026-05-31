@@ -501,3 +501,39 @@ Evidence Requests
 Evidence Adapter
 ↓
 Evidence Records
+
+## Requirement Layer
+
+Requirements express human intent.
+
+Claims make requirements observable.
+
+Architecture:
+
+Requirement
+↓
+Approved Claims
+↓
+Evidence
+↓
+Assurance
+
+---
+
+## requirement_models.py
+
+Defines requirement domain objects.
+
+---
+
+## requirement_library.py
+
+Loads requirements from configuration.
+
+---
+
+## claim_assurance_engine.py
+
+Evaluates evidence records against approved claims.
+
+Phase 1C currently supports SERVICE_EXISTS.
