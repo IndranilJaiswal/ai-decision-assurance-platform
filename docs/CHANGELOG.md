@@ -179,3 +179,24 @@ Evidence Collection Engine
 Evidence Requests
 ↓
 Evidence Records
+
+### Added
+
+- EvidenceCollectionEngine
+- End-to-End Evidence Collection Test
+
+### Purpose
+
+Introduced orchestration for evidence collection.
+
+The platform can now collect evidence for approved claims through a reusable pipeline.
+
+### Architecture Impact
+
+Approved Claim
+↓
+Evidence Collection Engine
+↓
+Evidence Requests
+↓
+Evidence Records

@@ -492,3 +492,12 @@ Responsibilities:
 - Return evidence records
 
 The engine does not perform assurance evaluation.
+\
+
+Approved Claim
+↓
+Evidence Requests
+↓
+Evidence Adapter
+↓
+Evidence Records
