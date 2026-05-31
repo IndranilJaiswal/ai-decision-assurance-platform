@@ -137,3 +137,43 @@ Maps evidence types to supporting platforms.
 
 Role:
 Evidence capability mapping.
+
+## claim_assurance_engine.py
+
+Purpose
+
+Evaluates collected evidence against approved claims.
+
+Current Supported Claims
+
+* SERVICE_EXISTS
+* SERVICE_HEALTHY
+
+Responsibilities
+
+* Evidence coverage validation
+* Evidence gap detection
+* Claim assurance evaluation
+
+---
+
+## dynatrace_adapter.py
+
+Purpose
+
+Converts normalized runtime reality into evidence records.
+
+Current Evidence Types
+
+Supported
+
+* service_exists
+
+Placeholder Evidence Types
+
+* response_time
+* failure_rate
+
+Future Role
+
+Provide live runtime metrics from Dynatrace for health assurance.

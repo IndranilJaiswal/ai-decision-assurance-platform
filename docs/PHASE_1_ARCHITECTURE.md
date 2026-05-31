@@ -611,3 +611,84 @@ Displayed Information
 Implementation
 
 dashboard_v2/app.py
+
+## Phase 1E – Service Health Assurance
+
+Purpose
+
+Introduce evidence coverage evaluation for service health claims.
+
+Previously the platform only evaluated:
+
+* SERVICE_EXISTS
+
+The platform can now evaluate:
+
+* SERVICE_HEALTHY
+
+---
+
+SERVICE_HEALTHY
+
+Description
+
+Determines whether sufficient evidence exists to justify the claim that a service is healthy.
+
+Required Evidence
+
+* service_exists
+* response_time
+* failure_rate
+
+---
+
+Evidence Coverage Rules
+
+A claim cannot be evaluated unless all required evidence has been collected and observed.
+
+If any required evidence is missing:
+
+Status:
+
+INSUFFICIENT_EVIDENCE
+
+Explanation:
+
+Required evidence is missing or has not been observed.
+
+---
+
+Current Implementation
+
+Collected from Dynatrace:
+
+* service_exists
+
+Not yet collected:
+
+* response_time
+* failure_rate
+
+Result:
+
+SERVICE_HEALTHY currently produces:
+
+INSUFFICIENT_EVIDENCE
+
+until metric collection is implemented.
+
+---
+
+Architecture Impact
+
+Requirement
+↓
+Claim
+↓
+Required Evidence
+↓
+Evidence Coverage Evaluation
+↓
+Claim Assurance
+↓
+Requirement Assurance
