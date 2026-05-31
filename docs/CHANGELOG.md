@@ -105,3 +105,26 @@ Reality Provider
 Runtime Reality
 ↓
 Evidence Collection
+## 2026-05-31
+
+### Added
+
+- DynatraceClient
+- DynatraceProvider
+- Live SERVICE entity ingestion
+- Environment variable configuration
+- .env.example
+
+### Purpose
+
+Connected the platform to live Dynatrace runtime reality.
+
+### Architecture Impact
+
+Dynatrace API
+↓
+Dynatrace Provider
+↓
+RuntimeReality
+↓
+Evidence Collection

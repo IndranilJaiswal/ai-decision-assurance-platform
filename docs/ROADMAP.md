@@ -101,3 +101,15 @@ In Progress:
 - Live Dynatrace Provider
 - Evidence Collection Engine
 - Assurance Integration
+### Completed
+
+- Live Dynatrace Client
+- Live Dynatrace Provider
+- SERVICE entity ingestion
+
+### Remaining
+
+- Container ingestion
+- Host ingestion
+- Dependency ingestion
+- Metrics ingestion

@@ -412,3 +412,26 @@ Temporary Dynatrace implementation.
 Purpose:
 
 Allow development and testing of the Claim → Evidence flow before live Dynatrace API integration.
+## dynatrace_client.py
+
+Low-level Dynatrace API client.
+
+Purpose:
+
+Handles authenticated calls to Dynatrace APIs.
+
+Does not contain assurance logic.
+
+---
+
+## dynatrace_provider.py
+
+Live Dynatrace runtime reality provider.
+
+Purpose:
+
+Converts Dynatrace entities into normalized RuntimeReality.
+
+Current support:
+
+- SERVICE entities
