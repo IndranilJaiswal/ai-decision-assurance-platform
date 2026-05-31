@@ -6,6 +6,7 @@ cachetools==7.1.4
 certifi==2026.5.20
 charset-normalizer==3.4.7
 click==8.4.1
+dnspython==2.8.0
 gitdb==4.0.12
 GitPython==3.1.50
 h11==0.16.0
@@ -24,6 +25,7 @@ pillow==12.2.0
 protobuf==7.35.0
 pyarrow==24.0.0
 pydeck==0.9.2
+pymongo==4.17.0
 python-dateutil==2.9.0.post0
 python-dotenv==1.2.2
 python-multipart==0.0.29
