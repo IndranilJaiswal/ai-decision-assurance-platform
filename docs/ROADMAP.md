@@ -15,7 +15,7 @@ Status: Complete
 
 ### Outcome
 
-The platform can now transform approved claims into observable evidence requirements.
+The platform can transform approved claims into observable evidence requirements.
 
 ---
 
@@ -30,27 +30,23 @@ Collect real evidence from Dynatrace.
 ### Deliverables
 
 - Dynatrace Evidence Adapter
-- Evidence Records
+- Evidence Record Model
 - Evidence Collection Engine
 
-### Example
-
-Claim:
+### First Supported Evidence Type
 
 SERVICE_EXISTS
 
-↓
+### Example Flow
+
+Approved Claim:
+SERVICE_EXISTS
 
 Evidence Request:
-
 service_exists
 
-↓
-
+Reality Source:
 Dynatrace
 
-↓
-
 Evidence Record:
-
-easyTravel Customer Frontend observed
+Service observed or not observed
