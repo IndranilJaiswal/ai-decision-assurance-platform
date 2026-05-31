@@ -23,6 +23,3 @@ If Dynatrace cannot observe it, the AI should not treat it as verified truth.
 ```bash
 python backend/app_v2/main.py
 
-<img width="625" height="342" alt="image" src="https://github.com/user-attachments/assets/f47d7997-6111-4fa7-8bd8-ee443bf4d7fc" />
-
-<img width="1536" height="1024" alt="New Vision" src="https://github.com/user-attachments/assets/3c98a33e-6cfe-48fc-a323-058490765b81" />
