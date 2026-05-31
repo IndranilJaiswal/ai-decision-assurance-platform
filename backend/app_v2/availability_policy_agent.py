@@ -2,7 +2,7 @@
 Availability Policy Agent
 
 Purpose:
-Translate policy objectives into candidate assurance claims.
+Translate approved policy objectives into candidate assurance claims.
 
 Responsibilities:
 - Read approved organizational policies
@@ -11,6 +11,7 @@ Responsibilities:
 
 Important:
 The agent does NOT approve claims.
+The agent does NOT collect evidence.
 The agent does NOT perform assurance.
 
 Future Evolution:
@@ -18,6 +19,7 @@ Replace deterministic claim discovery with LLM-assisted
 policy interpretation while preserving the same output schema.
 """
 
+from claim_suggestion_models import ClaimSuggestion
 from policy_loader import load_policy
 
 
@@ -31,35 +33,36 @@ class AvailabilityPolicyAgent:
         "service_availability_policy.yaml"
     )
 
-    def suggest_claims(self, requirement_text: str) -> list[dict]:
+    def suggest_claims(self, requirement_text: str) -> list[ClaimSuggestion]:
         """
         Suggest claims for a requirement.
 
         Current Behavior:
-        Returns all policy claims.
+        Returns all claims associated with the policy.
 
         Future Behavior:
-        Match specific objectives to requirement text using AI.
+        Use an LLM to match the requirement text to the most relevant
+        policy objectives while keeping the output model unchanged.
         """
 
         policy = load_policy(self.POLICY_PATH)
 
         suggestions = []
 
-        # Generate candidate claims with full policy traceability.
         for objective in policy.objectives:
 
             for claim_id in objective.suggested_claims:
 
                 suggestions.append(
-                    {
-                        "claim_id": claim_id,
-                        "policy_id": policy.policy_id,
-                        "policy_name": policy.name,
-                        "objective_id": objective.objective_id,
-                        "objective_description": objective.description,
-                        "requirement": requirement_text,
-                    }
+                    ClaimSuggestion(
+                        claim_id=claim_id,
+                        policy_id=policy.policy_id,
+                        policy_name=policy.name,
+                        objective_id=objective.objective_id,
+                        objective_description=objective.description,
+                        requirement=requirement_text,
+                        approved=False,
+                    )
                 )
 
         return suggestions

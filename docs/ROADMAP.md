@@ -338,3 +338,59 @@ Human Approval
 Approved Claims
 ↓
 Evidence Collection
+
+## Completed
+
+### Phase 2B – Human Approval Workflow
+
+Implemented
+
+* Claim suggestion model
+* Claim approval engine
+* Approval workflow
+* Approval traceability
+
+Current Flow
+
+Requirement
+↓
+Policy Agent
+↓
+Suggested Claims
+↓
+Human Approval
+↓
+Approved Claims
+
+Output
+
+Approved claims become assurance scope.
+
+Rejected claims are excluded from evidence collection.
+
+---
+
+## Next
+
+### Phase 2C – Dashboard Approval Workflow
+
+Objectives
+
+* Display suggested claims
+* Select claims for approval
+* Display approved claims
+* Persist approval decisions
+
+Expected Architecture
+
+Requirement
+↓
+Policy Agent
+↓
+Suggested Claims
+↓
+Dashboard Approval
+↓
+Approved Claims
+↓
+Evidence Collection

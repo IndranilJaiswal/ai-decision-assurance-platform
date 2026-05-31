@@ -773,3 +773,78 @@ Requirement
 Suggested Claims
 ↓
 Policy References
+
+## Phase 2B – Human Approval Workflow
+
+### Purpose
+
+Introduce a governance checkpoint between claim discovery and assurance execution.
+
+Policy and standards agents may suggest claims, but suggested claims do not automatically become assurance scope.
+
+A human reviewer must approve claims before evidence collection begins.
+
+### Architecture
+
+Requirement
+↓
+Policy Agent
+↓
+Suggested Claims
+↓
+Human Approval
+↓
+Approved Claims
+↓
+Evidence Collection
+↓
+Claim Assurance
+↓
+Requirement Assurance
+
+### Responsibilities
+
+Policy Agent
+
+* Suggest candidate claims
+* Provide policy traceability
+* Provide rationale
+
+Human Reviewer
+
+* Approve claims
+* Reject claims
+* Define assurance scope
+
+Evidence Collection
+
+* Collect evidence only for approved claims
+
+Assurance Engine
+
+* Evaluate evidence
+* Determine claim status
+* Determine requirement status
+
+### Governance Principle
+
+AI suggests.
+
+Humans approve.
+
+Evidence determines assurance.
+
+### Future Evolution
+
+Current
+
+Human approval occurs through explicit claim selection.
+
+Future
+
+Dashboard approval workflow with:
+
+* Claim review
+* Claim approval
+* Claim rejection
+* Approval audit history

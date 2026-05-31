@@ -413,3 +413,50 @@ Policy Agents suggest claims.
 Human reviewers approve claims.
 
 Assurance remains evidence-driven and deterministic.
+
+## 2026-05-31
+
+### Added
+
+Human Approval Workflow
+
+Files Added
+
+* claim_suggestion_models.py
+* claim_approval_engine.py
+* test_human_approval_workflow.py
+
+Files Updated
+
+* availability_policy_agent.py
+
+### New Capability
+
+Suggested claims now require explicit approval before entering assurance scope.
+
+Example
+
+Suggested Claims
+
+* SERVICE_EXISTS
+* SERVICE_HEALTHY
+* NO_ACTIVE_PROBLEMS
+
+Approved Claims
+
+* SERVICE_EXISTS
+* SERVICE_HEALTHY
+
+Rejected Claims
+
+* NO_ACTIVE_PROBLEMS
+
+### Governance Improvement
+
+Introduced separation between:
+
+* Claim Discovery
+* Claim Approval
+* Assurance Execution
+
+This ensures policy agents cannot directly influence assurance outcomes without human review.
