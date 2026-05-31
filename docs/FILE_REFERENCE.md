@@ -522,3 +522,141 @@ This reinforces the platform principle that explanations do not influence assura
 * Executive summaries
 * Business impact narratives
 * Audience-specific explanations
+
+## MongoDB Knowledge Layer
+
+### mongodb_client.py
+
+Purpose:
+
+Provide authenticated access to MongoDB Atlas.
+
+Responsibilities:
+
+- Establish MongoDB connection
+- Validate connectivity
+- Return collection handles
+
+Must Not:
+
+- Perform retrieval
+- Perform assurance evaluation
+- Call Gemini
+
+Future:
+
+Will be used by retrieval and ingestion services.
+
+---
+
+### seed_knowledge_base.py
+
+Purpose:
+
+Seed the assurance knowledge base with initial documents.
+
+Responsibilities:
+
+- Seed organization policies
+- Seed standards
+- Seed technical documentation
+- Seed claim library
+- Seed remediation library
+
+Must Not:
+
+- Perform retrieval
+- Perform AI reasoning
+- Perform assurance
+
+Future:
+
+Will eventually be replaced by document ingestion workflows.
+
+---
+
+### organization_policies Collection
+
+Purpose:
+
+Store internal governance and policy requirements.
+
+Examples:
+
+- Service Availability Policy
+- Monitoring Policy
+
+Used By:
+
+Gemini Assurance Agent
+
+---
+
+### standards Collection
+
+Purpose:
+
+Store external standards and guidance.
+
+Examples:
+
+- IEC 62443
+- NIST
+
+Used By:
+
+Gemini Assurance Agent
+
+---
+
+### technical_documentation Collection
+
+Purpose:
+
+Store architecture-specific implementation knowledge.
+
+Examples:
+
+- Service architecture
+- Dependency documentation
+- Runbooks
+
+Used By:
+
+Gemini Assurance Agent
+
+---
+
+### claim_library Collection
+
+Purpose:
+
+Store approved claim templates.
+
+Examples:
+
+- SERVICE_EXISTS
+- SERVICE_HEALTHY
+- NO_ACTIVE_PROBLEMS
+
+Used By:
+
+Gemini Assurance Agent
+Assurance Engine
+
+---
+
+### remediation_library Collection
+
+Purpose:
+
+Store reusable remediation patterns.
+
+Examples:
+
+- Enable Response Time Monitoring
+- Enable Failure Rate Monitoring
+
+Used By:
+
+Remediation Agent
