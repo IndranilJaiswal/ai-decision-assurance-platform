@@ -700,6 +700,7 @@ Added:
 - RetrievedContext model
 - KnowledgeRetriever
 
+
 Current Retrieval Strategy:
 
 - Title matching
@@ -766,3 +767,6 @@ Introduces the distinction between:
 
 This enables future implementation of the
 Claim Classification Engine.
+
+- Added test_claims.py validation utility
+- Added MongoDB repository verification workflow

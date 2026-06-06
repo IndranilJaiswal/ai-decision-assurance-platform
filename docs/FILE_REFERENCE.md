@@ -789,3 +789,28 @@ Future Consumers
 claim_classifier.py
 claim_discovery_agent.py
 assurance_engine.py
+
+## backend/app_v2/test_claims.py
+
+Purpose
+-------
+Validation utility for MongoDB claim repository.
+
+Responsibilities
+----------------
+
+- Connects to MongoDB Atlas
+- Reads claim_patterns collection
+- Reads executable_claims collection
+- Displays repository contents
+
+Usage
+-----
+
+python3 backend/app_v2/test_claims.py
+
+Used During
+-----------
+
+Phase 4B.1
+MongoDB Claim Repository Foundation
