@@ -940,3 +940,25 @@ Used By
 claim_discovery_agent.py
 
 future remediation workflows
+
+## backend/app_v2/gemini_client.py
+
+Purpose
+-------
+Reusable Gemini wrapper.
+
+Responsibilities
+----------------
+
+- Gemini authentication
+- Prompt execution
+- Response retrieval
+
+Consumers
+---------
+
+claim_discovery_agent.py
+
+remediation_agent.py
+
+explanation_agent.py
