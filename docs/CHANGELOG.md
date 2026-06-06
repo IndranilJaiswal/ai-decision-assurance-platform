@@ -944,3 +944,23 @@ Knowledge Retrieval
 Gemini
 ↓
 ClaimSuggestion
+
+## [Phase 4E.1] - Gemini Client
+
+### Added
+
+- Configurable Gemini model support
+- Retry handling
+- Fallback response support
+
+### Default Model
+
+gemini-3.1-flash-lite
+
+### Purpose
+
+Provides reusable AI integration for:
+
+- Claim Discovery Agent
+- Remediation Agent
+- Explanation Agent

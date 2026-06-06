@@ -988,3 +988,32 @@ Consumers
 claim_approval_engine.py
 
 coverage_gap_detector.py
+
+## backend/app_v2/gemini_client.py
+
+Purpose
+-------
+Reusable Gemini wrapper.
+
+Features
+--------
+
+- Configurable model selection
+- Retry handling
+- Fallback support
+
+Environment Variables
+---------------------
+
+GEMINI_API_KEY
+
+GEMINI_MODEL
+
+Consumers
+---------
+
+claim_discovery_agent.py
+
+Future:
+remediation_agent.py
+explanation_agent.py
