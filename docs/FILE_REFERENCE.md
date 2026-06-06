@@ -1060,3 +1060,142 @@ PML Approval Workflow
 
 Future:
 Dashboard Review UI
+
+# FILE_REFERENCE.md
+
+## Governance Layer
+
+### governance_decision_model.py
+
+Purpose:
+Defines the formal governance decision model used by the AI Decision Assurance Platform.
+
+Responsibilities:
+
+* Define PML decision states
+* Define SDL decision states
+* Define governance decision record structure
+* Separate assurance intent from execution approval
+
+Key Concepts:
+
+* PML owns assurance intent
+* SDL owns execution approval
+* Governance decisions become auditable platform artifacts
+
+### pml_governance_router.py
+
+Purpose:
+Routes claim review packages into the correct governance workflow.
+
+Responsibilities:
+
+* Identify supported executable claims
+* Identify coverage gaps requiring governance classification
+* Prevent unsupported claims from entering execution workflows
+
+Routing Logic:
+
+SUPPORTED
+→ PML_APPROVAL_REQUIRED
+
+COVERAGE_GAP
+→ PML_GOVERNANCE_CLASSIFICATION_REQUIRED
+
+UNKNOWN
+→ MANUAL_REVIEW_REQUIRED
+
+### test_pml_governance_router.py
+
+Purpose:
+Validates governance routing behavior.
+
+Responsibilities:
+
+* Verify supported claims route correctly
+* Verify coverage gaps route correctly
+* Demonstrate governance workflow behavior
+
+## Claim Library Layer
+
+### config/claim_library.yaml
+
+Purpose:
+Governed repository of approved assurance claims.
+
+Responsibilities:
+
+* Define approved claim identifiers
+* Define claim categories
+* Define claim descriptions
+
+Notes:
+New AI-discovered claims do not automatically enter this library.
+PML governance classification is required before expansion.
+
+### config/capability_matrix.yaml
+
+Purpose:
+Maps approved claims to executable assurance capabilities.
+
+Responsibilities:
+
+* Define evidence requirements
+* Define entity types
+* Define verifiability model
+
+Coverage States:
+
+SUPPORTED
+
+* Claim exists in claim library
+* Executable capability exists
+
+COVERAGE_GAP
+
+* Claim discovered
+* No executable capability exists
+
+## Governance Workflow
+
+Requirement
+↓
+Claim Discovery
+↓
+Claim Review Package
+↓
+Coverage Assessment
+
+SUPPORTED
+↓
+PML Approval
+↓
+SDL Workflow
+↓
+Evidence Collection
+↓
+Claim Assurance
+
+COVERAGE_GAP
+↓
+PML Governance Classification
+↓
+Governance Backlog
+↓
+Future Claim Library Expansion
+
+## Architectural Principle
+
+The platform separates:
+
+Governance Intent
+(PML)
+
+from
+
+Execution Authority
+(SDL)
+
+This prevents AI-discovered claims from automatically becoming executable assurance requirements.
+
+All claim library growth is governed.
