@@ -844,3 +844,33 @@ Future Sources:
 
 Establishes the Retrieval-Augmented Generation (RAG)
 foundation for Gemini Claim Discovery.
+
+## [Phase 4C.1] - Knowledge Retrieval Layer
+
+### Added
+
+- knowledge_retriever.py
+- test_knowledge_retriever.py
+
+### Purpose
+
+Introduces the Knowledge Retrieval Layer.
+
+This layer retrieves governed context from
+MongoDB before invoking Gemini.
+
+Current Sources:
+
+- claim_patterns
+
+Future Sources:
+
+- policies
+- standards
+- technical_documents
+- remediation_patterns
+
+### Architectural Impact
+
+Establishes the Retrieval-Augmented Generation (RAG)
+foundation for Gemini Claim Discovery.

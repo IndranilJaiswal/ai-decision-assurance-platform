@@ -870,3 +870,34 @@ claim_discovery_agent.py
 Future:
 assurance_engine.py
 remediation_agent.py
+
+## backend/app_v2/knowledge_retriever.py
+
+Purpose
+-------
+Retrieves governed knowledge from MongoDB.
+
+Current Sources
+---------------
+
+claim_patterns
+
+Future Sources
+--------------
+
+policies
+
+standards
+
+technical_documents
+
+remediation_patterns
+
+Consumers
+---------
+
+claim_discovery_agent.py
+
+Future:
+assurance_engine.py
+remediation_agent.py
