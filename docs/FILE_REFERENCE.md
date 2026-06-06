@@ -1737,3 +1737,330 @@ Assurance MCP Server
 - Reason: discover_claims
 - Plan: map_claim
 - Act: request_dynatrace_evidence
+
+Architecture
+Gemini Agent (Google ADK)
+
+        │
+
+        ▼
+
+Reason Layer
+
+discover_claims()
+
+        │
+
+        ▼
+
+Planning Layer
+
+map_claim()
+
+        │
+
+        ▼
+
+Governance Layer
+
+PML Approval
+
+        │
+
+        ▼
+
+Execution Layer
+
+Partner MCP Requests
+
+        │
+
+        ▼
+
+Dynatrace Observability
+
+Service Context
+Problem Context
+Metric Context
+
+        │
+
+        ▼
+
+Assurance Layer
+
+Claim Assurance Engine
+
+        │
+
+        ▼
+
+Requirement Assurance Engine
+
+        │
+
+        ▼
+
+Dashboard
+Core Backend
+Claim Discovery
+
+backend/app_v2/claim_discovery_agent.py
+
+Purpose:
+
+Gemini reasoning layer.
+
+Responsibilities:
+
+Discover assurance claims
+Generate rationale
+Explain business impact
+Claim Mapping
+
+backend/app_v2/pml_claim_mapping_agent.py
+
+Purpose:
+
+Gemini planning layer.
+
+Responsibilities:
+
+Map discovered claims
+Reuse executable claims
+Identify coverage gaps
+Governance
+
+backend/app_v2/pml_governance_router.py
+
+Purpose:
+
+Human approval workflow.
+
+Responsibilities:
+
+Claim approval
+Mapping approval
+Coverage gap governance
+Assurance
+
+backend/app_v2/claim_assurance_engine.py
+
+Purpose:
+
+Evaluate evidence against approved claims.
+
+Statuses:
+
+VERIFIED
+FAILED
+INSUFFICIENT_EVIDENCE
+Dynatrace Runtime Reality
+
+backend/app_v2/dynatrace_client.py
+
+Purpose:
+
+Raw Dynatrace API integration.
+
+backend/app_v2/dynatrace_provider.py
+
+Purpose:
+
+Normalize Dynatrace runtime reality.
+
+backend/app_v2/dynatrace_adapter.py
+
+Purpose:
+
+Convert runtime reality into evidence.
+
+MCP Layer
+
+backend/app_v2/mcp_request_models.py
+
+Purpose:
+
+Generate MCP evidence requests.
+
+Request Types:
+
+service_context
+service_health
+latency_analysis
+dependency_analysis
+
+Partner Domain:
+
+Dynatrace Observability MCP
+
+MCP Servers
+
+backend/app_v2/assurance_mcp_server.py
+
+Purpose:
+
+Expose assurance capabilities through MCP.
+
+Tools:
+
+discover_claims
+map_claim
+
+backend/app_v2/dynatrace_mcp_server.py
+
+Purpose:
+
+Observability MCP boundary.
+
+Future Partner Integration:
+
+Dynatrace Official MCP Server
+
+Agent Layer
+
+agent_builder/decision_assurance_agent.py
+
+Purpose:
+
+Google ADK orchestration layer.
+
+Model:
+
+gemini-3.1-flash-lite
+
+Workflow:
+
+Reason
+→ Plan
+→ Govern
+→ Act
+→ Assure
+→ Explain
+
+Dashboard
+
+dashboard_v2/app.py
+
+Purpose:
+
+Executive assurance interface.
+
+Capabilities:
+
+Claim discovery review
+Mapping review
+PML approval
+Runtime evidence review
+Assurance execution
+Assurance explanation
+MCP request visibility
+
+cat > docs/FILE_REFERENCE.md <<'EOF'
+# File Reference
+
+## Core Agent and Governance
+
+### `backend/app_v2/claim_discovery_agent.py`
+Gemini reasoning layer. Converts requirements into candidate assurance claims.
+
+### `backend/app_v2/pml_claim_mapping_agent.py`
+Gemini/PML planning layer. Maps discovered claims to governed executable claims where possible.
+
+### `backend/app_v2/pml_governance_router.py`
+Routes supported claims, mapping candidates, and coverage gaps for PML review.
+
+### `backend/app_v2/claim_assurance_engine.py`
+Evaluates whether collected evidence supports an approved governed claim.
+
+### `backend/app_v2/requirement_assurance_engine.py`
+Rolls claim assurance results into requirement-level assurance status.
+
+---
+
+## Partner MCP Integration
+
+### `backend/app_v2/dynatrace_partner_mcp_client.py`
+Low-level JSON-RPC client for the hosted Dynatrace Partner MCP server.
+
+Uses:
+- `DYNATRACE_MCP_URL`
+- `DYNATRACE_PLATFORM_TOKEN`
+
+Supports:
+- MCP initialize
+- tool listing
+- `get-entity-id`
+- `query-problems`
+- `create-dql`
+- `execute-dql`
+- `ask-dynatrace-docs`
+
+### `backend/app_v2/dynatrace_mcp_evidence_provider.py`
+Converts hosted Dynatrace MCP tool responses into platform `EvidenceRecord` objects.
+
+Maps:
+- `service_exists` / `service_entity` → `get-entity-id`
+- `active_problems` → `query-problems`
+- `response_time` → `create-dql` + `execute-dql`
+- `failure_rate` → `create-dql` + `execute-dql`
+- `percentile_latency_p95` → `create-dql` + `execute-dql`
+- `percentile_latency_p99` → `create-dql` + `execute-dql`
+
+### `backend/app_v2/mcp_request_models.py`
+Defines MCP evidence request models for service context, service health, latency analysis, and dependency analysis.
+
+---
+
+## Google Agent Layer
+
+### `agent_builder/decision_assurance_agent.py`
+Google ADK-compatible Gemini agent wrapper.
+
+Model:
+- `gemini-3.1-flash-lite`
+
+Workflow:
+- Reason: discover claims
+- Plan: map claims
+- Govern: preserve PML approval
+- Act: request evidence through MCP tools
+- Assure: use platform assurance engine
+- Explain: summarize status, gaps, and business impact
+
+---
+
+## Dashboard
+
+### `dashboard_v2/app.py`
+Streamlit dashboard showing:
+- Gemini claim discovery
+- claim mapping
+- PML governance review
+- governed assurance scope
+- evidence collection
+- claim assurance
+- requirement assurance
+- AI assurance explanation
+
+Current next task:
+- Complete final wiring from dashboard assurance execution to `DynatraceMCPEvidenceProvider`.
+
+---
+
+## Legacy / Transitional Files
+
+### `backend/app_v2/dynatrace_client.py`
+REST API client for Dynatrace Environment API.
+
+### `backend/app_v2/dynatrace_provider.py`
+REST-backed runtime reality provider.
+
+### `backend/app_v2/dynatrace_adapter.py`
+REST-backed evidence adapter.
+
+### `backend/app_v2/evidence_collection_engine.py`
+Generic adapter-based evidence collection engine.
+
+These remain useful as fallback/reference but are no longer the preferred partner MCP path.
+EOF

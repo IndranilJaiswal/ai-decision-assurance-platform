@@ -51,3 +51,28 @@ Evidence Layer       ✅
 Assurance Layer      ✅
 Execution Layer      🚧 Planned
 MCP Integration      🚧 Planned
+
+cat >> README.md <<'EOF'
+
+---
+
+## Current Architecture: Gemini + PML + Dynatrace Partner MCP
+
+The AI Decision Assurance Platform implements a governed assurance workflow:
+
+```text
+Requirement
+    ↓
+Gemini Claim Discovery
+    ↓
+PML Claim Mapping
+    ↓
+PML Governance Approval
+    ↓
+Dynatrace Partner MCP Evidence Collection
+    ↓
+Claim Assurance Engine
+    ↓
+Requirement Assurance Engine
+    ↓
+Dashboard Explanation

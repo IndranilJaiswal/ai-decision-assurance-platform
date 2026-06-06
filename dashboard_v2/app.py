@@ -19,7 +19,7 @@ PML Governance Review
 ↓
 Current Governed Assurance Scope
 ↓
-Dynatrace Evidence Collection
+Dynatrace Partner MCP Evidence Collection
 ↓
 Claim Assurance
 ↓
@@ -45,9 +45,8 @@ from claim_assurance_engine import ClaimAssuranceEngine
 from claim_discovery_agent import ClaimDiscoveryAgent
 from claim_library import load_claim_library
 from claim_models import ApprovedClaim
-from dynatrace_adapter import DynatraceEvidenceAdapter
-from dynatrace_provider import DynatraceProvider
-from evidence_collection_engine import EvidenceCollectionEngine
+from dynatrace_mcp_evidence_provider import DynatraceMCPEvidenceProvider
+from dynatrace_partner_mcp_client import DynatracePartnerMCPClient
 from pml_claim_mapping_agent import PMLClaimMappingAgent
 from pml_governance_router import route_claim_review_package
 from requirement_assurance_engine import RequirementAssuranceEngine
@@ -62,7 +61,8 @@ st.set_page_config(
 st.title("AI Decision Assurance Platform")
 st.caption(
     "AI reasons over governance knowledge, maps discovered claims, "
-    "plans assurance coverage, and acts through governed Dynatrace evidence."
+    "plans assurance coverage, and acts through the hosted Dynatrace "
+    "Partner MCP server."
 )
 
 
@@ -368,11 +368,11 @@ def render_ai_decision_trace(
     with act_col:
         st.subheader("Act")
         st.write(
-            "The platform acts only through governed workflow: PML review "
-            "first, then runtime evidence collection."
+            "The platform acts through the hosted Dynatrace Partner MCP "
+            "server only after PML-approved governed claims enter scope."
         )
         st.metric("Approved for Evidence", len(approved_claim_ids))
-        st.write("Dynatrace evidence is queried only for approved claims.")
+        st.write("Dynatrace MCP evidence is requested only for approved claims.")
 
 
 def render_governed_assurance_scope(
@@ -441,17 +441,42 @@ def render_governed_assurance_scope(
 
             render_ai_explanation(suggestion)
 
-            st.markdown("#### Evidence Engine Handoff")
+            st.markdown("#### Partner MCP Evidence Handoff")
             st.success(
-                "Approved for evidence collection. The evidence engine will "
-                f"execute governed claim `{item['governed_claim_id']}`."
+                "Approved for evidence collection. The platform will request "
+                "evidence from the hosted Dynatrace Partner MCP server for "
+                f"governed claim `{item['governed_claim_id']}`."
             )
 
 
 @st.cache_data(ttl=60)
-def load_runtime_reality():
-    provider = DynatraceProvider()
-    return provider.get_runtime_reality().to_dict()
+def load_dynatrace_mcp_status():
+    """
+    Validate connectivity to the hosted Dynatrace Partner MCP server.
+
+    This is not an assurance decision.
+    It only confirms that the partner MCP server can be initialized and that
+    tools are available for evidence retrieval.
+    """
+
+    client = DynatracePartnerMCPClient()
+
+    initialize_result = client.initialize()
+    tools_result = client.list_tools()
+
+    tools = tools_result.get("result", {}).get("tools", [])
+
+    return {
+        "initialize": initialize_result,
+        "tool_count": len(tools),
+        "tools": [
+            {
+                "name": tool.get("name"),
+                "title": tool.get("title"),
+            }
+            for tool in tools
+        ],
+    }
 
 
 @st.cache_data(ttl=60)
@@ -496,11 +521,26 @@ def build_fallback_suggestions(selected_requirement):
 
 
 def run_assurance_for_requirement(requirement, approved_governed_claim_ids):
-    claims = load_claim_library()
-    runtime_reality = load_runtime_reality()
+    """
+    Run assurance only for PML-approved governed claims.
 
-    adapter = DynatraceEvidenceAdapter(runtime_reality)
-    collection_engine = EvidenceCollectionEngine(adapter)
+    Evidence is collected through the hosted Dynatrace Partner MCP server.
+
+    Flow:
+    PML-approved governed claim
+        ↓
+    Dynatrace Partner MCP tools
+        ↓
+    EvidenceRecord objects
+        ↓
+    Claim Assurance Engine
+        ↓
+    Requirement Assurance Engine
+    """
+
+    claims = load_claim_library()
+
+    evidence_provider = DynatraceMCPEvidenceProvider()
 
     claim_assurance_engine = ClaimAssuranceEngine()
     requirement_assurance_engine = RequirementAssuranceEngine()
@@ -517,7 +557,9 @@ def run_assurance_for_requirement(requirement, approved_governed_claim_ids):
             thresholds={},
         )
 
-        evidence_records = collection_engine.collect_evidence(approved_claim)
+        evidence_records = evidence_provider.collect_evidence(
+            approved_claim
+        )
 
         claim_result = claim_assurance_engine.evaluate(
             approved_claim,
@@ -925,18 +967,19 @@ st.markdown("## Current Governed Assurance Scope")
 scope_col1, scope_col2, scope_col3 = st.columns(3)
 
 scope_col1.metric("Approved Governed Claims", len(approved_scope_items))
-scope_col2.metric("Approved for Evidence Engine", len(approved_scope_items))
+scope_col2.metric("Approved for Partner MCP Evidence", len(approved_scope_items))
 scope_col3.metric("Blocked Coverage Gaps", len(coverage_gaps))
 
 if len(approved_scope_items) == 0:
     st.warning(
-        "No executable claims are currently approved for the evidence engine. "
-        "All discovered claims require governance classification or mapping."
+        "No executable claims are currently approved for the partner MCP "
+        "evidence provider. All discovered claims require governance "
+        "classification or mapping."
     )
 else:
     st.success(
         f"{len(approved_scope_items)} approved governed claim(s) can proceed "
-        "to Dynatrace evidence collection."
+        "to Dynatrace Partner MCP evidence collection."
     )
 
 render_governed_assurance_scope(
@@ -948,25 +991,29 @@ render_governed_assurance_scope(
 st.markdown("## Evidence Plane")
 
 with st.container(border=True):
-    st.subheader("Dynatrace Runtime Evidence")
+    st.subheader("Dynatrace Partner MCP Evidence Collection")
 
     st.info(
-        "Dynatrace provides runtime evidence, but runtime evidence is not "
-        "assurance by itself. A claim must be governed, executable, approved, "
-        "and evaluated before it can become VERIFIED."
+        "Runtime evidence is requested from the hosted Dynatrace Partner MCP "
+        "server. The platform converts MCP responses into EvidenceRecord "
+        "objects and evaluates them against PML-approved governed claims."
     )
 
     try:
-        runtime_reality = load_runtime_reality()
+        mcp_status = load_dynatrace_mcp_status()
 
-        st.success("Dynatrace runtime reality loaded.")
+        st.success(
+            "Dynatrace Partner MCP server reachable. "
+            f"{mcp_status['tool_count']} tool(s) available."
+        )
 
-        with st.expander("View Runtime Reality Snapshot"):
-            st.json(runtime_reality)
+        with st.expander("View Dynatrace Partner MCP Tool Snapshot"):
+            st.json(mcp_status)
 
     except Exception as exc:
         st.warning(
-            "Dynatrace runtime evidence could not be loaded in the dashboard."
+            "Dynatrace Partner MCP server could not be reached from the "
+            "dashboard."
         )
         st.code(str(exc))
 
