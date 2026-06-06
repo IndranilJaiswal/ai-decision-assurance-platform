@@ -874,3 +874,31 @@ Future Sources:
 
 Establishes the Retrieval-Augmented Generation (RAG)
 foundation for Gemini Claim Discovery.
+
+## [Phase 4D] - Coverage Gap Detection
+
+### Added
+
+- coverage_gap_models.py
+- coverage_gap_detector.py
+- test_coverage_gap_detector.py
+
+### Purpose
+
+Introduces first-class support for
+Coverage Gaps.
+
+Coverage Gaps occur when a claim
+does not exist in the executable
+claim library.
+
+### Architectural Impact
+
+Platform now distinguishes:
+
+- Coverage Gap
+- Evidence Gap
+
+This enables future Gemini-generated
+claims to be routed into remediation
+instead of failing assurance.

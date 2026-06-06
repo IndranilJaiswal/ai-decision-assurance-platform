@@ -901,3 +901,42 @@ claim_discovery_agent.py
 Future:
 assurance_engine.py
 remediation_agent.py
+
+## backend/app_v2/coverage_gap_models.py
+
+Purpose
+-------
+Represents unsupported claims.
+
+Used By
+-------
+
+coverage_gap_detector.py
+
+remediation_agent.py
+
+
+## backend/app_v2/coverage_gap_detector.py
+
+Purpose
+-------
+Detects unsupported claims.
+
+Input
+-----
+
+Claim ID
+
+Output
+------
+
+CoverageGap
+or
+None
+
+Used By
+-------
+
+claim_discovery_agent.py
+
+future remediation workflows
