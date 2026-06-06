@@ -23,3 +23,31 @@ If Dynatrace cannot observe it, the AI should not treat it as verified truth.
 ```bash
 python backend/app_v2/main.py
 
+
+Requirement
+    ↓
+Gemini Claim Discovery Agent
+    ↓
+PML Claim Mapping Agent
+    ↓
+Governance Review
+    ↓
+Approved Assurance Scope
+    ↓
+Dynatrace Evidence Collection
+    ↓
+Claim Assurance
+    ↓
+Requirement Assurance
+    ↓
+Assurance Explanation
+
+Current Status
+
+Reasoning Layer      ✅
+Planning Layer       ✅
+Governance Layer     ✅
+Evidence Layer       ✅
+Assurance Layer      ✅
+Execution Layer      🚧 Planned
+MCP Integration      🚧 Planned
