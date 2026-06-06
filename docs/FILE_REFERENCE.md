@@ -1381,3 +1381,359 @@ PML Governance Router
 Claim Registry
     ↓
 Lifecycle State
+
+Core Governance Components
+governance_decision_model.py
+
+Purpose:
+Defines governance decisions and routing outcomes used by the platform.
+
+Responsibilities:
+
+Governance decision representation
+Governance routing outcomes
+Approval state handling
+
+Architectural Role:
+Provides a common governance model for PML review workflows.
+
+pml_governance_router.py
+
+Purpose:
+Routes discovered claims through governance review.
+
+Responsibilities:
+
+Classify supported claims
+Classify mapping candidates
+Classify governance gaps
+Determine approval routing path
+
+Architectural Role:
+Acts as the entry point into the governance plane.
+
+claim_lifecycle_state_machine.py
+
+Purpose:
+Defines allowed claim lifecycle transitions.
+
+Lifecycle:
+
+DISCOVERED
+↓
+PML_REVIEW_REQUIRED
+↓
+PML_APPROVED
+↓
+SDL_REVIEW_REQUIRED
+↓
+SDL_APPROVED
+↓
+APPROVED_FOR_ASSURANCE
+
+Responsibilities:
+
+Validate lifecycle transitions
+Prevent invalid approval paths
+
+Architectural Role:
+Provides governance control over claim progression.
+
+claim_registry.py
+
+Purpose:
+Maintains governed claim records.
+
+Responsibilities:
+
+Register claims
+Store lifecycle state
+Track approval status
+
+Architectural Role:
+Acts as the governed inventory of claims under review.
+
+claim_intake_workflow.py
+
+Purpose:
+Coordinates intake of newly discovered claims.
+
+Responsibilities:
+
+Register claims
+Initiate governance review
+Trigger lifecycle progression
+
+Architectural Role:
+Entry point for new assurance requirements.
+
+AI Reasoning Layer
+claim_discovery_agent.py
+
+Purpose:
+Uses Gemini reasoning to discover assurance claims from requirements.
+
+Workflow:
+
+Requirement
+↓
+Knowledge Retrieval
+↓
+Gemini
+↓
+Claim Suggestions
+
+Responsibilities:
+
+Requirement decomposition
+Claim discovery
+Business impact generation
+Governance need generation
+
+Architectural Role:
+Reasoning layer of the platform.
+
+pml_claim_mapping_agent.py
+
+Purpose:
+Uses Gemini-assisted reasoning to determine whether discovered claims can be mapped to existing governed claims.
+
+Workflow:
+
+Discovered Claim
+↓
+Gemini Analysis
+↓
+Governed Claim Recommendation
+↓
+PML Approval
+
+Responsibilities:
+
+Semantic claim matching
+Mapping confidence generation
+Mapping rationale generation
+
+Architectural Role:
+Planning layer of the platform.
+
+Assurance Knowledge Base
+config/claim_library.yaml
+
+Purpose:
+Defines executable governed claims.
+
+Responsibilities:
+
+Claim definitions
+Required evidence
+Assurance rules
+Supported assurance scope
+
+Architectural Role:
+Source of executable assurance logic.
+
+config/capability_matrix.yaml
+
+Purpose:
+Maps requirements and capabilities to claims.
+
+Responsibilities:
+
+Coverage analysis
+Gap identification
+Capability traceability
+
+Architectural Role:
+Coverage planning model.
+
+Evidence Layer
+dynatrace_provider.py
+
+Purpose:
+Collects normalized runtime reality from Dynatrace.
+
+Responsibilities:
+
+Runtime topology discovery
+Service discovery
+Environment normalization
+
+Architectural Role:
+Reality provider.
+
+dynatrace_adapter.py
+
+Purpose:
+Converts runtime reality into evidence records.
+
+Responsibilities:
+
+Service existence evidence
+Service entity evidence
+Dependency evidence
+Runtime observation conversion
+
+Architectural Role:
+Evidence adapter layer.
+
+Important:
+The adapter does not make assurance decisions.
+
+evidence_collection_engine.py
+
+Purpose:
+Coordinates evidence collection for approved claims.
+
+Responsibilities:
+
+Evidence request execution
+Evidence aggregation
+Adapter orchestration
+
+Architectural Role:
+Evidence collection engine.
+
+Assurance Layer
+claim_assurance_engine.py
+
+Purpose:
+Determines whether collected evidence supports an approved claim.
+
+Responsibilities:
+
+Evidence gap analysis
+Claim verification
+Claim failure determination
+
+Supported Claims:
+
+SERVICE_EXISTS
+SERVICE_HEALTHY
+
+Architectural Role:
+Claim-level assurance engine.
+
+requirement_assurance_engine.py
+
+Purpose:
+Aggregates claim assurance results into requirement assurance outcomes.
+
+Responsibilities:
+
+Requirement verification
+Assurance aggregation
+Requirement status calculation
+
+Architectural Role:
+Requirement-level assurance engine.
+
+assurance_explanation_engine.py
+
+Purpose:
+Generates human-readable assurance explanations.
+
+Responsibilities:
+
+Assurance summaries
+Recommendation generation
+Executive explanation output
+
+Architectural Role:
+Explainability layer.
+
+Dashboard
+dashboard_v2/app.py
+
+Purpose:
+Primary demonstration dashboard for the hackathon prototype.
+
+Responsibilities:
+
+Requirement selection
+Gemini claim discovery visualization
+PML mapping visualization
+Governance review workflow
+Dynatrace evidence visualization
+Assurance execution
+Assurance explanation
+
+Architectural Role:
+User interaction and demonstration layer.
+
+Current Architecture Status
+
+Reasoning Layer
+Status: Implemented
+
+Components:
+
+claim_discovery_agent.py
+
+Planning Layer
+Status: Implemented
+
+Components:
+
+pml_claim_mapping_agent.py
+
+Governance Layer
+Status: Implemented
+
+Components:
+
+pml_governance_router.py
+claim_lifecycle_state_machine.py
+claim_registry.py
+
+Evidence Layer
+Status: Implemented
+
+Components:
+
+dynatrace_provider.py
+dynatrace_adapter.py
+
+Assurance Layer
+Status: Implemented
+
+Components:
+
+claim_assurance_engine.py
+requirement_assurance_engine.py
+
+Dashboard Layer
+Status: Implemented
+
+Components:
+
+dashboard_v2/app.py
+
+Execution Layer
+Status: Planned
+
+Future Scope:
+
+GitHub Action generation
+SDL remediation workflow
+Automated execution recommendations
+
+MCP Integration
+Status: Planned
+
+Future Scope:
+
+Agent Builder integration
+MCP tool exposure
+Agent-callable assurance workflows
+
+Google ADK Agent
+- Gemini 3.1 Flash Lite
+- Uses MCP tools
+- Orchestrates discover_claims, map_claim, request_dynatrace_evidence
+
+Assurance MCP Server
+- Exposes platform tools through MCP
+- Reason: discover_claims
+- Plan: map_claim
+- Act: request_dynatrace_evidence
