@@ -1199,3 +1199,72 @@ Execution Authority
 This prevents AI-discovered claims from automatically becoming executable assurance requirements.
 
 All claim library growth is governed.
+
+## Claim Lifecycle Management
+
+### claim_lifecycle_state_machine.py
+
+Purpose:
+Defines the authoritative lifecycle for assurance claims.
+
+Responsibilities:
+
+* Define valid claim states
+* Define permitted state transitions
+* Prevent governance bypass
+* Establish approval workflow boundaries
+
+Lifecycle States:
+
+DISCOVERED
+↓
+PML_REVIEW_REQUIRED
+↓
+PML_APPROVED
+↓
+SDL_REVIEW_REQUIRED
+↓
+SDL_APPROVED
+↓
+APPROVED_FOR_ASSURANCE
+↓
+VERIFIED | FAILED | INSUFFICIENT_EVIDENCE
+
+Governance States:
+
+PML_CLASSIFIED_NEW_GOVERNANCE_CLAIM
+PML_REJECTED
+PML_DEFERRED
+
+Architectural Principle:
+
+AI-discovered claims cannot bypass governance.
+
+Example:
+
+DISCOVERED
+→ SDL_APPROVED
+
+Result:
+Not Allowed
+
+Reason:
+PML governance approval is required before execution review.
+
+### test_claim_lifecycle_state_machine.py
+
+Purpose:
+Validates lifecycle transition rules.
+
+Responsibilities:
+
+* Verify allowed transitions
+* Verify prohibited transitions
+* Demonstrate governance enforcement
+
+Example Validation:
+
+DISCOVERED
+→ SDL_APPROVED
+
+Allowed: False

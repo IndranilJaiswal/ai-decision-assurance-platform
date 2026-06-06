@@ -1043,3 +1043,35 @@ This improves explainability for PML approval.
 The platform now distinguishes between:
 - Supported executable claims
 - New governance claims requiring classification
+
+## [0.5.0] - Claim Lifecycle Foundation
+
+### Added
+
+* Claim lifecycle state machine
+* Lifecycle transition validation
+* Governance enforcement rules
+
+### Architecture
+
+Introduced formal lifecycle management for assurance claims.
+
+New lifecycle:
+
+DISCOVERED
+→ PML_REVIEW_REQUIRED
+→ PML_APPROVED
+→ SDL_REVIEW_REQUIRED
+→ SDL_APPROVED
+→ APPROVED_FOR_ASSURANCE
+→ VERIFIED / FAILED / INSUFFICIENT_EVIDENCE
+
+### Governance
+
+Claims can no longer transition directly from discovery to execution approval.
+
+Governance review is now enforced through lifecycle state transitions.
+
+### Outcome
+
+The platform now has a governed assurance workflow with explicit approval checkpoints and auditable state transitions.
