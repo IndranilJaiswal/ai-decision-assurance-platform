@@ -719,3 +719,73 @@ Must Not:
 
 - Modify MongoDB
 - Call Gemini
+
+### claim_classifier.py
+
+Purpose
+
+Determine whether a Gemini-generated claim is executable.
+
+Outputs
+
+- EXECUTABLE_CLAIM
+- POTENTIAL_ASSURANCE_GAP
+
+Must Not
+
+- Perform assurance
+- Collect evidence
+- Create GitLab issues
+
+### executable_claims Collection
+
+Purpose
+
+Store executable assurance claims.
+
+Contains
+
+- claim definition
+- required evidence
+- assurance logic
+
+Used By
+
+Assurance Engine
+
+## backend/app_v2/seed_claims.py
+
+Purpose
+-------
+Seeds the MongoDB claim repository.
+
+Collections Managed
+-------------------
+
+claim_patterns
+
+Example claim definitions used as retrieval
+context for Gemini Claim Discovery.
+
+Example:
+
+SERVICE_EXISTS
+SERVICE_HEALTHY
+
+---
+
+executable_claims
+
+Claims currently supported by the Assurance Engine.
+
+Example:
+
+SERVICE_EXISTS
+SERVICE_HEALTHY
+
+Future Consumers
+----------------
+
+claim_classifier.py
+claim_discovery_agent.py
+assurance_engine.py

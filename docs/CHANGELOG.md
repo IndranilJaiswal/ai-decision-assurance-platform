@@ -711,3 +711,58 @@ Future Evolution:
 - Atlas Vector Search
 - Embeddings
 - Semantic Retrieval
+
+## Architecture Refinement – Assurance Gap Model
+
+Summary
+
+Introduced Assurance Gap concept.
+
+Changes
+
+- Claim Library renamed to Claim Patterns.
+- Introduced Executable Claims collection.
+- Added Claim Classification stage.
+- Added Potential Assurance Gap workflow.
+- Added Coverage Gap remediation path.
+- Added GitLab issue generation for approved assurance gaps.
+
+Benefits
+
+The platform can now identify controls and dependencies that
+should be assured but are not yet represented by executable
+assurance definitions.
+
+## [Phase 4B.1] - MongoDB Claim Repository Foundation
+
+### Added
+
+- Created MongoDB collection:
+  - claim_patterns
+  - executable_claims
+
+- Added seed_claims.py
+
+### Purpose
+
+Provides the initial governed claim repository for the
+AI Assurance Platform.
+
+The repository separates:
+
+1. Claim Patterns
+   - Example claims used by Gemini Claim Discovery.
+
+2. Executable Claims
+   - Claims currently supported by the Assurance Engine.
+
+### Architectural Impact
+
+Introduces the distinction between:
+
+- Suggested Claims
+- Executable Claims
+- Potential Assurance Gaps
+
+This enables future implementation of the
+Claim Classification Engine.
