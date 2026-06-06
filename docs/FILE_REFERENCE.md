@@ -1017,3 +1017,23 @@ claim_discovery_agent.py
 Future:
 remediation_agent.py
 explanation_agent.py
+
+## backend/app_v2/seed_governance_knowledge.py
+
+Purpose
+-------
+Seeds governance collections.
+
+Collections
+-----------
+
+policies
+
+standards
+
+Used By
+-------
+
+knowledge_retriever.py
+
+claim_review_package_builder.py

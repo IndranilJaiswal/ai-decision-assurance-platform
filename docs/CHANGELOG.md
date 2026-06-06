@@ -986,3 +986,20 @@ Each package includes:
 - relevant policy references
 - relevant standards references
 - coverage status
+
+## [Phase 4G.1] - Governance Knowledge Base
+
+### Added
+
+- policies collection
+- standards collection
+- seed_governance_knowledge.py
+- governance retrieval support
+
+### Purpose
+
+Introduces governance knowledge retrieval
+for policy and standards traceability.
+
+This enables claim review packages to
+reference authoritative sources.
