@@ -1353,3 +1353,31 @@ Claim Instance
 (from the Claim Registry)
 
 This allows multiple assurance workflows to operate on the same governed claim definition while maintaining independent lifecycle state and governance history.
+
+## Claim Intake Workflow Layer
+
+### claim_intake_workflow.py
+
+Purpose:
+Turns claim review packages into governed claim instances.
+
+Architectural Role:
+The Claim Intake Workflow is the first orchestration layer in the Governance Plane.
+
+Responsibilities:
+- Accept claim review packages
+- Route claims using the PML Governance Router
+- Create claim instances in the Claim Registry
+- Assign initial lifecycle state
+- Preserve distinction between supported claims and coverage gaps
+
+Workflow:
+
+```text
+Claim Review Package
+    ↓
+PML Governance Router
+    ↓
+Claim Registry
+    ↓
+Lifecycle State

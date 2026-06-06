@@ -1106,3 +1106,34 @@ The platform can now:
 * Maintain governance workflow context
 
 This establishes the foundation for future workflow orchestration and approval processing.
+
+## [0.7.0] - Claim Intake Workflow
+
+### Added
+
+- Claim Intake Workflow
+- Claim intake result model
+- Intake test script for supported claims and coverage gaps
+
+### Architecture
+
+Introduced the first orchestration layer in the Governance Plane.
+
+The workflow connects:
+
+- Claim Review Package
+- PML Governance Router
+- Claim Registry
+- Claim Lifecycle State
+
+### Governance
+
+All discovered claims now enter PML review before any downstream workflow.
+
+Supported claims are routed toward PML approval.
+
+Coverage gaps are routed toward PML governance classification.
+
+### Outcome
+
+The platform can now convert claim review packages into governed claim instances with lifecycle state and registry tracking.
