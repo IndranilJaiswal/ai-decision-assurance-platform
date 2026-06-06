@@ -1,39 +1,87 @@
-# Defines which claim types can be verified using Dynatrace evidence.
-# This is the contract between claims and the evidence engine.
-
 SERVICE_EXISTS:
-  source: dynatrace
-  entity_type: SERVICE
   evidence:
-    - service_exists
-  verifiability: VERIFIABLE_BY_DYNATRACE
+    - service_entity
+  entity_type: SERVICE
+  verifiability: EXECUTABLE
 
 SERVICE_HEALTHY:
-  source: dynatrace
-  entity_type: SERVICE
   evidence:
-    - service_exists
-    - failure_rate
     - response_time
-  verifiability: VERIFIABLE_BY_DYNATRACE
+    - failure_rate
+    - active_problems
+  entity_type: SERVICE
+  verifiability: EXECUTABLE
+
+SERVICE_SCALABLE:
+  evidence:
+    - service_instance_count
+    - cpu_utilization
+    - request_throughput
+  entity_type: SERVICE
+  verifiability: EXECUTABLE
+
+SERVICE_REDUNDANT:
+  evidence:
+    - service_instance_count
+    - host_count
+  entity_type: SERVICE
+  verifiability: EXECUTABLE
+
+SERVICE_RECOVERABLE:
+  evidence:
+    - restart_events
+    - active_problems
+    - recent_availability
+  entity_type: SERVICE
+  verifiability: EXECUTABLE
+
+DEPENDENCY_AVAILABLE:
+  evidence:
+    - dependency_entity
+    - dependency_call_success_rate
+    - dependency_response_time
+  entity_type: DEPENDENCY
+  verifiability: EXECUTABLE
+
+LOAD_BALANCER_OPERATIONAL:
+  evidence:
+    - load_balancer_entity
+    - backend_service_count
+    - request_distribution
+  entity_type: LOAD_BALANCER
+  verifiability: EXECUTABLE
+
+CAPACITY_SUFFICIENT:
+  evidence:
+    - cpu_utilization
+    - memory_utilization
+    - disk_utilization
+    - request_throughput
+  entity_type: SERVICE
+  verifiability: EXECUTABLE
+
+LATENCY_WITHIN_LIMITS:
+  evidence:
+    - response_time
+    - percentile_latency_p95
+    - percentile_latency_p99
+  entity_type: SERVICE
+  verifiability: EXECUTABLE
 
 CONTAINER_EXISTS:
-  source: dynatrace
-  entity_type: CONTAINER
   evidence:
-    - container_exists
-  verifiability: VERIFIABLE_BY_DYNATRACE
+    - container_entity
+  entity_type: CONTAINER
+  verifiability: EXECUTABLE
 
 DEPENDENCY_EXISTS:
-  source: dynatrace
-  entity_type: SERVICE
   evidence:
-    - dependency_exists
-  verifiability: VERIFIABLE_BY_DYNATRACE
+    - dependency_relationship
+  entity_type: DEPENDENCY
+  verifiability: EXECUTABLE
 
 NO_ACTIVE_PROBLEMS:
-  source: dynatrace
-  entity_type: SERVICE
   evidence:
     - active_problems
-  verifiability: VERIFIABLE_BY_DYNATRACE
+  entity_type: SERVICE
+  verifiability: EXECUTABLE

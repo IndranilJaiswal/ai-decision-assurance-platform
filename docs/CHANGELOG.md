@@ -1025,3 +1025,21 @@ Review packages now include:
 - Coverage status
 
 This improves explainability for PML approval.
+
+## [0.4.0] - Governance Routing Foundation
+
+### Added
+- Governance decision model
+- PML governance routing layer
+- Separation of governance intent and execution approval
+
+### Architecture
+- PML owns assurance intent
+- SDL owns execution approval
+- Coverage gaps no longer flow directly to execution
+- Coverage gaps are routed to governance classification workflow
+
+### Outcome
+The platform now distinguishes between:
+- Supported executable claims
+- New governance claims requiring classification
