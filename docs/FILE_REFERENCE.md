@@ -814,3 +814,28 @@ Used During
 
 Phase 4B.1
 MongoDB Claim Repository Foundation
+
+## backend/app_v2/claim_classifier.py
+
+Purpose
+-------
+Classifies Gemini-generated claims.
+
+Outputs
+-------
+
+EXECUTABLE_CLAIM
+
+POTENTIAL_ASSURANCE_GAP
+
+MongoDB Collections
+-------------------
+
+executable_claims
+
+Future Consumers
+----------------
+
+claim_discovery_agent.py
+
+pml_approval_workflow.py
