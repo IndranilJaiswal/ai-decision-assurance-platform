@@ -1037,3 +1037,26 @@ Used By
 knowledge_retriever.py
 
 claim_review_package_builder.py
+
+## backend/app_v2/claim_review_package_builder.py
+
+Purpose
+-------
+Builds explainable review packages for PML approval.
+
+Responsibilities
+----------------
+
+- Coverage Gap Detection
+- Category Classification
+- Policy Retrieval
+- Standards Retrieval
+- Business Impact Explanation
+
+Consumers
+---------
+
+PML Approval Workflow
+
+Future:
+Dashboard Review UI

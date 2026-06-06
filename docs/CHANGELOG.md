@@ -1003,3 +1003,25 @@ for policy and standards traceability.
 
 This enables claim review packages to
 reference authoritative sources.
+
+## [Phase 4G.1] - Governance Traceability
+
+### Updated
+
+- claim_review_package_builder.py
+
+### Added
+
+- Policy retrieval
+- Standards retrieval
+- Governance traceability
+
+### Purpose
+
+Review packages now include:
+
+- Relevant policies
+- Relevant standards
+- Coverage status
+
+This improves explainability for PML approval.

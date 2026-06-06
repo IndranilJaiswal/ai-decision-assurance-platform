@@ -1,36 +1,100 @@
 """
-Claim Review Package Builder
+claim_review_package_builder.py
 
 Purpose:
-Builds explainable claim review packages for PML approval.
+---------
+Build explainable review packages for Project Marketing Leader (PML)
+approval.
 
-Inputs:
-- ClaimSuggestion
-- CoverageGapDetector
-- MongoDB knowledge sources
+The PML should not approve opaque claim IDs.
 
-Output:
-- ClaimReviewPackage
+The review package provides:
 
-This module does not approve claims.
-It only prepares decision context.
+- Claim ID
+- Requirement
+- Assurance Category
+- Rationale
+- Business Impact
+- Relevant Policies
+- Relevant Standards
+- Coverage Status
+
+Workflow:
+----------
+Requirement
+↓
+Gemini Claim Discovery
+↓
+ClaimSuggestion
+↓
+Coverage Gap Detection
+↓
+Policy / Standards Retrieval
+↓
+ClaimReviewPackage
+↓
+PML Approval
+
+Author:
+-------
+Indranil Jaiswal
+AI Assurance Platform
 """
 
 from claim_review_models import ClaimReviewPackage
 from coverage_gap_detector import CoverageGapDetector
+from knowledge_retriever import KnowledgeRetriever
 
 
 class ClaimReviewPackageBuilder:
-    """Build PML review packages for suggested claims."""
+    """
+    Builds review packages for human governance.
+
+    This module does not perform approval.
+
+    It prepares decision context for the
+    Project Marketing Leader (PML).
+    """
 
     def __init__(self):
-        self.coverage_gap_detector = CoverageGapDetector()
+        """
+        Initialize supporting services.
+        """
 
-    def build(self, suggestion) -> ClaimReviewPackage:
-        """Build a review package for one claim suggestion."""
+        self.coverage_gap_detector = (
+            CoverageGapDetector()
+        )
 
-        gap = self.coverage_gap_detector.detect(
-            suggestion.claim_id
+        self.retriever = (
+            KnowledgeRetriever()
+        )
+
+    def build(
+        self,
+        suggestion,
+    ) -> ClaimReviewPackage:
+        """
+        Build a review package from a claim suggestion.
+
+        Parameters
+        ----------
+        suggestion:
+            ClaimSuggestion object produced
+            by the Claim Discovery Agent.
+
+        Returns
+        -------
+        ClaimReviewPackage
+        """
+
+        # ----------------------------------
+        # Coverage Analysis
+        # ----------------------------------
+
+        gap = (
+            self.coverage_gap_detector.detect(
+                suggestion.claim_id
+            )
         )
 
         coverage_status = (
@@ -39,51 +103,204 @@ class ClaimReviewPackageBuilder:
             else "SUPPORTED"
         )
 
+        # ----------------------------------
+        # Build Review Package
+        # ----------------------------------
+
         return ClaimReviewPackage(
             claim_id=suggestion.claim_id,
+
             requirement=suggestion.requirement,
-            category=self._infer_category(suggestion.claim_id),
-            rationale=self._build_rationale(suggestion.claim_id),
-            business_impact=self._build_business_impact(suggestion.claim_id),
-            relevant_policies=[
-                suggestion.policy_name,
-            ],
-            relevant_standards=[
-                "Internal Secure Development Lifecycle Guidance",
-            ],
+
+            category=self._infer_category(
+                suggestion.claim_id
+            ),
+
+            rationale=self._build_rationale(
+                suggestion.claim_id
+            ),
+
+            business_impact=self._build_business_impact(
+                suggestion.claim_id
+            ),
+
+            relevant_policies=self._find_relevant_policies(
+                suggestion.claim_id
+            ),
+
+            relevant_standards=self._find_relevant_standards(
+                suggestion.claim_id
+            ),
+
             coverage_status=coverage_status,
-            coverage_gap_reason=gap.reason if gap else None,
+
+            coverage_gap_reason=(
+                gap.reason
+                if gap
+                else None
+            ),
         )
 
-    def _infer_category(self, claim_id: str) -> str:
-        """Infer simple assurance category from claim name."""
+    # ==================================================
+    # Category Classification
+    # ==================================================
 
-        if "SERVICE" in claim_id:
+    def _infer_category(
+        self,
+        claim_id: str,
+    ) -> str:
+        """
+        Infer assurance category from claim name.
+
+        Future:
+        Replace with Gemini-assisted classification
+        using policy and standards context.
+        """
+
+        claim = claim_id.upper()
+
+        if "SERVICE" in claim:
             return "Availability"
 
-        if "DEPENDENC" in claim_id:
+        if "DEPENDENC" in claim:
             return "Architecture Dependency"
 
-        if "LATENCY" in claim_id:
+        if "RECOVERY" in claim:
+            return "Resilience"
+
+        if "LATENCY" in claim:
             return "Performance"
 
-        if "RECOVERY" in claim_id:
-            return "Resilience"
+        if "CAPACITY" in claim:
+            return "Capacity Management"
 
         return "General Assurance"
 
-    def _build_rationale(self, claim_id: str) -> str:
-        """Create a human-readable rationale."""
+    # ==================================================
+    # Explainability
+    # ==================================================
+
+    def _build_rationale(
+        self,
+        claim_id: str,
+    ) -> str:
+        """
+        Generate a human-readable explanation.
+
+        Future:
+        Generated by Gemini using policy and
+        standards context.
+        """
 
         return (
-            f"{claim_id} was suggested because it may be required "
-            "to assure the stated requirement."
+            f"{claim_id} was suggested because "
+            "it may be required to assure the "
+            "stated requirement."
         )
 
-    def _build_business_impact(self, claim_id: str) -> str:
-        """Create a simple business impact explanation."""
+    def _build_business_impact(
+        self,
+        claim_id: str,
+    ) -> str:
+        """
+        Generate business impact explanation.
+
+        Future:
+        Generated dynamically from governance
+        knowledge and architecture context.
+        """
 
         return (
-            f"If {claim_id} is not assured, the requirement may not be "
-            "fully supported by observable evidence."
+            f"If {claim_id} is not assured, "
+            "the requirement may not be fully "
+            "supported by observable evidence."
         )
+
+    # ==================================================
+    # Governance Retrieval
+    # ==================================================
+
+    def _find_relevant_policies(
+        self,
+        claim_id: str,
+    ) -> list[str]:
+        """
+        Find policies relevant to the claim.
+
+        Current Approach:
+        -----------------
+        Simple tag matching.
+
+        Future:
+        -----------------
+        Semantic retrieval using Gemini.
+        """
+
+        policies = (
+            self.retriever.get_policies()
+        )
+
+        matches = []
+
+        claim_text = claim_id.lower()
+
+        for policy in policies:
+
+            tags = policy.get(
+                "tags",
+                [],
+            )
+
+            if any(
+                tag.lower() in claim_text
+                for tag in tags
+            ):
+                matches.append(
+                    policy["title"]
+                )
+
+        return matches
+
+    def _find_relevant_standards(
+        self,
+        claim_id: str,
+    ) -> list[str]:
+        """
+        Find standards relevant to the claim.
+
+        Current Approach:
+        -----------------
+        Simple tag matching.
+
+        Future:
+        -----------------
+        Semantic retrieval using Gemini.
+        """
+
+        standards = (
+            self.retriever.get_standards()
+        )
+
+        matches = []
+
+        claim_text = claim_id.lower()
+
+        for standard in standards:
+
+            tags = standard.get(
+                "tags",
+                [],
+            )
+
+            if any(
+                tag.lower() in claim_text
+                for tag in tags
+            ):
+                matches.append(
+                    (
+                        f"{standard['standard_id']} - "
+                        f"{standard['title']}"
+                    )
+                )
+
+        return matches

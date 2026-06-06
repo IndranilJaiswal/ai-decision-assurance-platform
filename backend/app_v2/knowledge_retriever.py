@@ -3,70 +3,96 @@ knowledge_retriever.py
 
 Purpose:
 ---------
-Retrieves knowledge from MongoDB to provide
-context to the Gemini Claim Discovery Agent.
+Retrieves governed knowledge from MongoDB.
 
-Current Scope:
---------------
+Current Sources:
+----------------
 - claim_patterns
-
-Future Scope:
--------------
 - policies
 - standards
+
+Future Sources:
+---------------
 - technical_documents
 - remediation_patterns
 
-Author:
--------
-Indranil Jaiswal
-AI Assurance Platform
+This module provides retrieval context for:
+- Gemini Claim Discovery Agent
+- PML Claim Review Package Builder
 """
 
-from pymongo import MongoClient
-from dotenv import load_dotenv
 import os
 
-# --------------------------------------------------
-# Load environment variables
-# --------------------------------------------------
+from dotenv import load_dotenv
+from pymongo import MongoClient
+
 
 load_dotenv()
 
-mongodb_uri = os.getenv("MONGODB_URI")
-
-if not mongodb_uri:
-    raise ValueError(
-        "MONGODB_URI not configured"
-    )
-
-# --------------------------------------------------
-# MongoDB connection
-# --------------------------------------------------
-
-client = MongoClient(mongodb_uri)
-
-db = client["ai_assurance"]
-
-claim_patterns = db["claim_patterns"]
-
 
 class KnowledgeRetriever:
+    """
+    Retrieves knowledge documents from MongoDB.
 
-    def get_claim_patterns(self):
+    This class does not call Gemini.
+    It only retrieves governed knowledge.
+    """
+
+    def __init__(self):
+        """Initialize MongoDB connection."""
+
+        mongodb_uri = os.getenv("MONGODB_URI")
+
+        if not mongodb_uri:
+            raise ValueError(
+                "MONGODB_URI not configured"
+            )
+
+        self.client = MongoClient(mongodb_uri)
+
+        self.db = self.client["ai_assurance"]
+
+    def get_claim_patterns(self) -> list[dict]:
         """
-        Retrieve all known claim patterns.
+        Retrieve claim patterns.
 
-        Returns:
-            list[dict]
+        Claim patterns are examples used by Gemini
+        during claim discovery.
         """
 
-        patterns = []
+        return list(
+            self.db["claim_patterns"].find(
+                {},
+                {"_id": 0},
+            )
+        )
 
-        for document in claim_patterns.find(
-            {},
-            {"_id": 0}
-        ):
-            patterns.append(document)
+    def get_policies(self) -> list[dict]:
+        """
+        Retrieve governance policies.
 
-        return patterns
+        Policies provide business and organizational
+        traceability for claim review packages.
+        """
+
+        return list(
+            self.db["policies"].find(
+                {},
+                {"_id": 0},
+            )
+        )
+
+    def get_standards(self) -> list[dict]:
+        """
+        Retrieve standards guidance.
+
+        Standards provide external or internal technical
+        assurance references for claim review packages.
+        """
+
+        return list(
+            self.db["standards"].find(
+                {},
+                {"_id": 0},
+            )
+        )
