@@ -1,144 +1,72 @@
 """
-Knowledge Retriever
+knowledge_retriever.py
 
 Purpose:
-Retrieve relevant knowledge documents from MongoDB.
+---------
+Retrieves knowledge from MongoDB to provide
+context to the Gemini Claim Discovery Agent.
 
-Current Retrieval Strategy:
-- Title matching
-- Tag matching
-- Content matching
+Current Scope:
+--------------
+- claim_patterns
 
-Future:
-- Atlas Vector Search
-- Embeddings
-- Semantic Retrieval
+Future Scope:
+-------------
+- policies
+- standards
+- technical_documents
+- remediation_patterns
 
-Must Not:
-- Call Gemini
-- Generate Claims
-- Perform Assurance
+Author:
+-------
+Indranil Jaiswal
+AI Assurance Platform
 """
 
-from mongodb_client import MongoDBClient
-from knowledge_models import (
-    KnowledgeDocument,
-    RetrievedContext,
-)
+from pymongo import MongoClient
+from dotenv import load_dotenv
+import os
+
+# --------------------------------------------------
+# Load environment variables
+# --------------------------------------------------
+
+load_dotenv()
+
+mongodb_uri = os.getenv("MONGODB_URI")
+
+if not mongodb_uri:
+    raise ValueError(
+        "MONGODB_URI not configured"
+    )
+
+# --------------------------------------------------
+# MongoDB connection
+# --------------------------------------------------
+
+client = MongoClient(mongodb_uri)
+
+db = client["ai_assurance"]
+
+claim_patterns = db["claim_patterns"]
 
 
 class KnowledgeRetriever:
-    """
-    Retrieve knowledge relevant to a requirement.
-    """
 
-    COLLECTIONS = [
-        "organization_policies",
-        "standards",
-        "technical_documentation",
-    ]
-
-    def __init__(self):
-
-        self.mongo = MongoDBClient()
-
-    def retrieve(
-        self,
-        requirement: str,
-        max_results: int = 5,
-    ) -> RetrievedContext:
+    def get_claim_patterns(self):
         """
-        Retrieve relevant documents.
+        Retrieve all known claim patterns.
 
-        Current implementation uses simple keyword scoring.
+        Returns:
+            list[dict]
         """
 
-        requirement_lower = requirement.lower()
+        patterns = []
 
-        scored_documents = []
+        for document in claim_patterns.find(
+            {},
+            {"_id": 0}
+        ):
+            patterns.append(document)
 
-        for collection_name in self.COLLECTIONS:
-
-            collection = self.mongo.get_collection(
-                collection_name
-            )
-
-            for document in collection.find({}):
-
-                score = self._calculate_score(
-                    requirement_lower,
-                    document,
-                )
-
-                if score <= 0:
-                    continue
-
-                scored_documents.append(
-                    KnowledgeDocument(
-                        document_id=document["document_id"],
-                        source_type=document["source_type"],
-                        title=document["title"],
-                        content=document["content"],
-                        tags=document.get("tags", []),
-                        score=score,
-                    )
-                )
-
-        scored_documents.sort(
-            key=lambda document: document.score,
-            reverse=True,
-        )
-
-        return RetrievedContext(
-            requirement=requirement,
-            documents=scored_documents[:max_results],
-        )
-
-    def _calculate_score(
-        self,
-        requirement: str,
-        document: dict,
-    ) -> float:
-        """
-        Simple keyword-based scoring.
-
-        Scoring:
-        +5 title match
-        +3 tag match
-        +1 content match
-        """
-
-        score = 0
-
-        title = document.get(
-            "title",
-            "",
-        ).lower()
-
-        content = document.get(
-            "content",
-            "",
-        ).lower()
-
-        tags = [
-            tag.lower()
-            for tag in document.get(
-                "tags",
-                [],
-            )
-        ]
-
-        keywords = requirement.split()
-
-        for keyword in keywords:
-
-            if keyword in title:
-                score += 5
-
-            if keyword in tags:
-                score += 3
-
-            if keyword in content:
-                score += 1
-
-        return score
+        return patterns

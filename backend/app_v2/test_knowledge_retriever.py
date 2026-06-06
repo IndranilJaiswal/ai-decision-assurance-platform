@@ -1,46 +1,25 @@
 """
-Test Knowledge Retriever
+test_knowledge_retriever.py
 
 Purpose:
-Verify retrieval from MongoDB knowledge collections.
+---------
+Validate MongoDB retrieval of
+claim pattern knowledge.
+
+Usage:
+------
+python3 backend/app_v2/test_knowledge_retriever.py
 """
 
 from knowledge_retriever import KnowledgeRetriever
 
+retriever = KnowledgeRetriever()
 
-def main():
+patterns = retriever.get_claim_patterns()
 
-    retriever = KnowledgeRetriever()
+print("\n==============================")
+print("CLAIM PATTERNS")
+print("==============================")
 
-    context = retriever.retrieve(
-        "Booking service must remain available"
-    )
-
-    print()
-    print("Requirement:")
-    print(context.requirement)
-
-    print()
-    print("Retrieved Documents:")
-    print()
-
-    for document in context.documents:
-
-        print(
-            f"{document.document_id} "
-            f"({document.source_type})"
-        )
-
-        print(
-            f"Title: {document.title}"
-        )
-
-        print(
-            f"Score: {document.score}"
-        )
-
-        print()
-
-
-if __name__ == "__main__":
-    main()
+for pattern in patterns:
+    print(pattern)
