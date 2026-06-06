@@ -962,3 +962,29 @@ claim_discovery_agent.py
 remediation_agent.py
 
 explanation_agent.py
+
+## backend/app_v2/claim_discovery_agent.py
+
+Purpose
+-------
+Converts requirements into ClaimSuggestion
+objects.
+
+Dependencies
+------------
+
+GeminiClient
+
+KnowledgeRetriever
+
+Outputs
+-------
+
+ClaimSuggestion
+
+Consumers
+---------
+
+claim_approval_engine.py
+
+coverage_gap_detector.py

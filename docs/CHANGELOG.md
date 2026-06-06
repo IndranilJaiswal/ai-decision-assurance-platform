@@ -921,3 +921,26 @@ Future Consumers
 - Remediation Agent
 - Explanation Agent
 
+## [Phase 4E.2] - Claim Discovery Agent
+
+### Added
+
+- claim_discovery_agent.py
+- test_claim_discovery_agent.py
+
+### Purpose
+
+Introduces AI-powered claim discovery.
+
+Requirements can now be transformed into
+ClaimSuggestion objects using Gemini.
+
+Workflow
+
+Requirement
+↓
+Knowledge Retrieval
+↓
+Gemini
+↓
+ClaimSuggestion
