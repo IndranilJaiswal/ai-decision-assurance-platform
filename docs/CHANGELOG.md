@@ -964,3 +964,25 @@ Provides reusable AI integration for:
 - Claim Discovery Agent
 - Remediation Agent
 - Explanation Agent
+
+## [Phase 4F] - PML Claim Review Package
+
+### Added
+
+- claim_review_models.py
+- claim_review_package_builder.py
+- test_claim_review_package_builder.py
+
+### Purpose
+
+Creates explainable review packages for PML approval.
+
+Each package includes:
+
+- claim ID
+- category
+- rationale
+- business impact
+- relevant policy references
+- relevant standards references
+- coverage status
