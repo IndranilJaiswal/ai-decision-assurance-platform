@@ -1075,3 +1075,34 @@ Governance review is now enforced through lifecycle state transitions.
 ### Outcome
 
 The platform now has a governed assurance workflow with explicit approval checkpoints and auditable state transitions.
+
+## [0.6.0] - Claim Registry Foundation
+
+### Added
+
+* Claim Registry
+* Claim Instance model
+* Registry query capabilities
+* Lifecycle state persistence foundation
+
+### Architecture
+
+Introduced separation between:
+
+* Claim Definitions
+* Claim Instances
+
+Claim definitions remain governed artifacts stored in the Claim Library.
+
+Claim instances represent runtime governance records that move through the assurance lifecycle.
+
+### Outcome
+
+The platform can now:
+
+* Create claim instances
+* Track lifecycle state
+* Query claims by state
+* Maintain governance workflow context
+
+This establishes the foundation for future workflow orchestration and approval processing.

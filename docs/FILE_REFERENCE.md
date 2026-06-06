@@ -1268,3 +1268,88 @@ DISCOVERED
 → SDL_APPROVED
 
 Allowed: False
+
+## Claim Registry Layer
+
+### claim_registry.py
+
+Purpose:
+Stores and retrieves claim instances throughout the governance and assurance lifecycle.
+
+Architectural Role:
+The Claim Registry is the system of record for claim instances.
+
+Distinction:
+
+Claim Library
+
+* Stores governed claim definitions
+
+Claim Registry
+
+* Stores runtime claim instances
+
+Responsibilities:
+
+* Create claim instances
+* Retrieve claim instances
+* Track lifecycle state
+* Support governance reporting
+* Support assurance reporting
+
+Example:
+
+Claim Definition:
+CAPACITY_SUFFICIENT
+
+Claim Instances:
+
+* Claim Instance A
+* Claim Instance B
+* Claim Instance C
+
+Each instance may be associated with a different requirement, review cycle, or assurance workflow.
+
+### test_claim_registry.py
+
+Purpose:
+Validates registry operations.
+
+Responsibilities:
+
+* Create claim instances
+* Update claim state
+* Query claims by lifecycle state
+* Demonstrate registry behavior
+
+## Governance Architecture
+
+Requirement
+↓
+Claim Discovery
+↓
+Claim Review Package
+↓
+Coverage Assessment
+↓
+PML Governance Router
+↓
+Claim Lifecycle Manager
+↓
+Claim Registry
+
+The Claim Registry persists governance state across the assurance lifecycle.
+
+## Architectural Principle
+
+The platform separates:
+
+Claim Definition
+(from the Claim Library)
+
+from
+
+Claim Instance
+(from the Claim Registry)
+
+This allows multiple assurance workflows to operate on the same governed claim definition while maintaining independent lifecycle state and governance history.
