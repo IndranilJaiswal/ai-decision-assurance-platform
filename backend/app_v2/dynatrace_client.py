@@ -52,15 +52,10 @@ class DynatraceClient:
         )
 
         response.raise_for_status()
-
         return response.json()
 
     def get_metrics(self, metric_selector: str, page_size: int = 100) -> dict:
-        """
-        Fetch Dynatrace metric descriptors.
-
-        Used first for discovery so we do not hardcode metric IDs blindly.
-        """
+        """Fetch Dynatrace metric descriptors."""
 
         url = f"{self.base_url}/api/v2/metrics"
 
@@ -77,7 +72,6 @@ class DynatraceClient:
         )
 
         response.raise_for_status()
-
         return response.json()
 
     def query_metric_data(
@@ -88,12 +82,7 @@ class DynatraceClient:
         to_time: str = "now",
         resolution: str = "Inf",
     ) -> dict:
-        """
-        Query metric data from Dynatrace.
-
-        This will later be used to collect response_time and failure_rate
-        evidence for SERVICE_HEALTHY.
-        """
+        """Query metric data from Dynatrace."""
 
         url = f"{self.base_url}/api/v2/metrics/query"
 
@@ -115,5 +104,24 @@ class DynatraceClient:
         )
 
         response.raise_for_status()
+        return response.json()
 
+    def get_problems(self, page_size: int = 100) -> dict:
+        """Fetch open Dynatrace problems."""
+
+        url = f"{self.base_url}/api/v2/problems"
+
+        params = {
+            "pageSize": page_size,
+            "problemSelector": 'status("open")',
+        }
+
+        response = requests.get(
+            url,
+            headers=self.headers,
+            params=params,
+            timeout=30,
+        )
+
+        response.raise_for_status()
         return response.json()

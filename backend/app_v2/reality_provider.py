@@ -1,64 +1,34 @@
 """
 Reality Provider
 
-Provides normalized runtime reality for evidence collection.
-
-The Evidence Engine should not depend directly on Dynatrace,
-AWS, Azure, Kubernetes, or any other vendor API.
-
-External systems should be normalized into RuntimeReality first.
+Defines the normalized runtime reality model used by evidence providers.
 """
 
+from dataclasses import dataclass
+from abc import ABC, abstractmethod
 
+
+@dataclass
 class RuntimeReality:
-    """
-    Normalized representation of observed operational reality.
+    services: list[dict]
+    hosts: list[dict]
+    containers: list[dict]
+    dependencies: list[dict]
+    problems: list[dict] | None = None
 
-    Phase 1 examples:
-    - services
-    - hosts
-    - containers
-    - dependencies
-    """
-
-    def __init__(
-        self,
-        services=None,
-        hosts=None,
-        containers=None,
-        dependencies=None,
-    ):
-        self.services = services or []
-        self.hosts = hosts or []
-        self.containers = containers or []
-        self.dependencies = dependencies or []
-
-    def to_dict(self):
-        """Convert RuntimeReality into a dictionary."""
-
+    def to_dict(self) -> dict:
         return {
             "services": self.services,
             "hosts": self.hosts,
             "containers": self.containers,
             "dependencies": self.dependencies,
+            "problems": self.problems or [],
         }
 
 
-class RealityProvider:
-    """
-    Base interface for all reality providers.
+class RealityProvider(ABC):
+    """Base class for runtime reality providers."""
 
-    Future providers:
-    - DynatraceProvider
-    - KubernetesProvider
-    - AWSProvider
-    - AzureProvider
-    - ServiceNowProvider
-    """
-
+    @abstractmethod
     def get_runtime_reality(self) -> RuntimeReality:
-        """Return normalized runtime reality."""
-
-        raise NotImplementedError(
-            "Reality providers must implement get_runtime_reality()."
-        )
+        pass
