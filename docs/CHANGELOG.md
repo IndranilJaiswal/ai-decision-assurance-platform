@@ -244,3 +244,68 @@ Requirement
 - Some legacy REST-based Dynatrace files remain and should be marked legacy or archived during cleanup.
 - Cloud deployment is pending.
 EOF
+
+## Dashboard Refactor – AI Systems Assurance Platform
+
+### Platform Rename
+
+* Renamed platform from "AI Decision Assurance Platform" to "AI Systems Assurance Platform".
+* Shifted platform focus from individual assurance decisions to end-to-end system assurance.
+
+### Dashboard Simplification
+
+* Removed AI Decision Trace section.
+* Reduced dashboard clutter and improved executive readability.
+* Reorganized workflow around the assurance lifecycle.
+
+### Coverage Assessment Improvements
+
+* Converted claim assessment cards into collapsible sections.
+* Improved visibility of supported claims, mapping candidates, and coverage gaps.
+* Reduced vertical scrolling for large claim sets.
+
+### PML Review Improvements
+
+* Renamed "PML Governance Review" to "PML Review".
+* Converted PML Review into a collapsible section.
+* Simplified governance workflow presentation.
+
+### Assurance Scope Simplification
+
+* Removed duplicate "Current Governed Assurance Scope" section.
+* Consolidated approval and assurance scope information into Coverage Assessment and PML Review.
+* Eliminated redundant metrics.
+
+### Evidence Collection Improvements
+
+* Renamed "Evidence Plane" to "Evidence Collection".
+* Clarified Dynatrace Partner MCP role in evidence gathering.
+* Removed unnecessary MCP status and tool catalog loading from dashboard refresh path.
+
+### System-Centric Dashboard Design
+
+* Introduced system-oriented assurance model.
+* Added foundation for multi-system support.
+* Prepared dashboard structure for future system tabs.
+
+### Assurance Reporting Enhancements
+
+* Added executive-style assurance summary.
+* Introduced assurance scorecard concepts:
+
+  * Assurance Score
+  * Claim Assurance Coverage
+  * Evidence Coverage
+  * Confidence Band
+* Improved assurance explanation structure.
+
+### User Experience Improvements
+
+* Reduced dashboard complexity.
+* Improved readability for judges and executives.
+* Better alignment with:
+  System → Requirements → Claims → Evidence → Assurance.
+
+### Strategic Direction
+
+This refactor transitions the platform from a technical assurance workflow prototype toward a scalable AI Systems Assurance Platform capable of supporting multiple systems, governed assurance workflows, and partner MCP-based evidence collection.

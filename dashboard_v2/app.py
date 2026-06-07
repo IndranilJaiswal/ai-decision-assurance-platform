@@ -1,5 +1,5 @@
 """
-AI Decision Assurance Platform Dashboard
+AI Systems Assurance Platform Dashboard
 
 Visible flow:
 
@@ -15,7 +15,7 @@ AI Decision Trace: Reason / Plan / Act
 ↓
 Coverage Assessment
 ↓
-PML Governance Review
+PML Review
 ↓
 Current Governed Assurance Scope
 ↓
@@ -54,15 +54,14 @@ from requirement_library import load_requirements
 
 
 st.set_page_config(
-    page_title="AI Decision Assurance Platform",
+    page_title="AI Systems Assurance Platform",
     layout="wide",
 )
 
-st.title("AI Decision Assurance Platform")
+st.title("AI Systems Assurance Platform")
 st.caption(
-    "AI reasons over governance knowledge, maps discovered claims, "
-    "plans assurance coverage, and acts through the hosted Dynatrace "
-    "Partner MCP server."
+    "Governed system assurance using AI reasoning, PML approval, "
+    "and runtime evidence collected through partner MCP integrations."
 )
 
 
@@ -124,6 +123,135 @@ def calculate_coverage_score(assessed_claims) -> int:
     ]
 
     return round((len(supported) / len(assessed_claims)) * 100)
+
+def calculate_assurance_metrics(requirement_result, evidence_by_claim):
+    """
+    Calculate executive assurance metrics.
+
+    Scoring model:
+    - 60% claim assurance
+    - 40% evidence coverage
+    """
+
+    claim_results = requirement_result.claim_results
+
+    total_claims = len(claim_results)
+    verified_claims = requirement_result.verified_claims
+    failed_claims = requirement_result.failed_claims
+    insufficient_claims = requirement_result.insufficient_claims
+
+    evidence_records = []
+
+    for records in evidence_by_claim.values():
+        evidence_records.extend(records)
+
+    total_evidence = len(evidence_records)
+
+    observed_evidence = len(
+        [
+            evidence
+            for evidence in evidence_records
+            if evidence.observed is True
+        ]
+    )
+
+    claim_score = (
+        round((verified_claims / total_claims) * 100)
+        if total_claims
+        else 0
+    )
+
+    evidence_score = (
+        round((observed_evidence / total_evidence) * 100)
+        if total_evidence
+        else 0
+    )
+
+    assurance_score = round(
+        (claim_score * 0.6) + (evidence_score * 0.4)
+    )
+
+    if assurance_score >= 90 and failed_claims == 0 and insufficient_claims == 0:
+        assurance_band = "HIGH"
+    elif assurance_score >= 70 and failed_claims == 0:
+        assurance_band = "MEDIUM"
+    else:
+        assurance_band = "LOW"
+
+    return {
+        "assurance_score": assurance_score,
+        "assurance_band": assurance_band,
+        "claim_score": claim_score,
+        "evidence_score": evidence_score,
+        "total_claims": total_claims,
+        "verified_claims": verified_claims,
+        "failed_claims": failed_claims,
+        "insufficient_claims": insufficient_claims,
+        "total_evidence": total_evidence,
+        "observed_evidence": observed_evidence,
+        "missing_evidence": total_evidence - observed_evidence,
+    }
+
+
+def render_assurance_scorecard(requirement_result, evidence_by_claim):
+    """
+    Render an executive assurance scorecard.
+    """
+
+    metrics = calculate_assurance_metrics(
+        requirement_result=requirement_result,
+        evidence_by_claim=evidence_by_claim,
+    )
+
+    st.markdown("### Assurance Scorecard")
+
+    score_col1, score_col2, score_col3, score_col4 = st.columns(4)
+
+    score_col1.metric(
+        "Assurance Score",
+        f"{metrics['assurance_score']}%",
+    )
+
+    score_col2.metric(
+        "Claim Assurance",
+        f"{metrics['claim_score']}%",
+        f"{metrics['verified_claims']}/{metrics['total_claims']} verified",
+    )
+
+    score_col3.metric(
+        "Evidence Coverage",
+        f"{metrics['evidence_score']}%",
+        (
+            f"{metrics['observed_evidence']}/"
+            f"{metrics['total_evidence']} observed"
+        ),
+    )
+
+    score_col4.metric(
+        "Confidence Band",
+        metrics["assurance_band"],
+    )
+
+    if metrics["assurance_score"] >= 90:
+        st.success(
+            "High assurance achieved. Approved claims are supported by "
+            "observed partner MCP evidence."
+        )
+    elif metrics["assurance_score"] >= 70:
+        st.warning(
+            "Partial assurance achieved. The requirement has meaningful "
+            "evidence support, but some claims or evidence items still need "
+            "attention."
+        )
+    else:
+        st.error(
+            "Low assurance. The requirement is not sufficiently supported by "
+            "verified claims and observed evidence."
+        )
+
+    return metrics
+
+
 
 
 @st.cache_data(ttl=60)
@@ -606,7 +734,7 @@ def render_evidence_records(evidence_records):
 def render_claim_result(claim_result, evidence_by_claim):
     with st.expander(
         f"{claim_result.claim_id} — {status_badge(claim_result.status)}",
-        expanded=True,
+        expanded=False,
     ):
         col1, col2, col3 = st.columns(3)
 
@@ -633,23 +761,68 @@ def render_claim_result(claim_result, evidence_by_claim):
         render_evidence_records(evidence_records)
 
 
-def render_assurance_explanation(requirement_result):
+def render_assurance_explanation(requirement_result, evidence_by_claim):
     explanation_engine = AssuranceExplanationEngine()
     explanation = explanation_engine.explain(requirement_result)
 
-    st.markdown("## AI Assurance Explanation")
+    metrics = calculate_assurance_metrics(
+        requirement_result=requirement_result,
+        evidence_by_claim=evidence_by_claim,
+    )
+
+    st.markdown("## Assurance Explanation")
 
     with st.container(border=True):
-        st.subheader(explanation.title)
-        st.write(explanation.summary)
+        st.subheader("Executive Assurance Summary")
 
-        st.markdown("### Details")
-        for detail in explanation.details:
-            st.write(f"• {detail}")
+        st.write(
+            f"Requirement assurance score is "
+            f"**{metrics['assurance_score']}%** with a "
+            f"**{metrics['assurance_band']}** confidence band."
+        )
 
-        st.markdown("### Recommendations")
-        for recommendation in explanation.recommendations:
-            st.write(f"• {recommendation}")
+        st.write(
+            f"The platform verified **{metrics['verified_claims']} of "
+            f"{metrics['total_claims']}** approved claims and observed "
+            f"**{metrics['observed_evidence']} of "
+            f"{metrics['total_evidence']}** required evidence items through "
+            f"Dynatrace Partner MCP."
+        )
+
+        if metrics["missing_evidence"] == 0 and metrics["failed_claims"] == 0:
+            st.success(
+                "No failed claims or missing evidence items were detected in "
+                "this assurance run."
+            )
+        else:
+            st.warning(
+                f"{metrics['missing_evidence']} evidence item(s), "
+                f"{metrics['insufficient_claims']} insufficient claim(s), "
+                f"and {metrics['failed_claims']} failed claim(s) require "
+                "review."
+            )
+
+        with st.expander("Detailed Explanation", expanded=False):
+            st.subheader(explanation.title)
+            st.write(explanation.summary)
+
+            st.markdown("### Details")
+            for detail in explanation.details:
+                st.write(f"• {detail}")
+
+        with st.expander("Recommendations", expanded=True):
+            for recommendation in explanation.recommendations:
+                st.write(f"• {recommendation}")
+
+            if metrics["assurance_score"] >= 90:
+                st.write("• Continue monitoring for runtime evidence drift.")
+                st.write("• Retain the current governed claim scope.")
+            elif metrics["assurance_score"] >= 70:
+                st.write("• Review missing evidence and insufficient claims.")
+                st.write("• Prioritize evidence gaps affecting runtime health.")
+            else:
+                st.write("• Escalate assurance gaps for PML and system owner review.")
+                st.write("• Do not rely on this requirement as fully assured.")
 
 
 def render_requirement_result(item):
@@ -670,6 +843,11 @@ def render_requirement_result(item):
 
         st.info(requirement_result.explanation)
 
+        render_assurance_scorecard(
+            requirement_result=requirement_result,
+            evidence_by_claim=evidence_by_claim,
+        )
+
         col1, col2, col3 = st.columns(3)
 
         col1.metric("Verified Claims", requirement_result.verified_claims)
@@ -687,12 +865,41 @@ def render_requirement_result(item):
                 evidence_by_claim,
             )
 
-    render_assurance_explanation(requirement_result)
+    render_assurance_explanation(
+        requirement_result=requirement_result,
+        evidence_by_claim=evidence_by_claim,
+    )
 
 
 # ---------------------------------------------------------------------------
 # Main dashboard
 # ---------------------------------------------------------------------------
+
+SYSTEMS = {
+    "easyTravel": {
+        "description": (
+            "Demo system monitored by Dynatrace and used for governed "
+            "runtime assurance."
+        ),
+        "target_service": "easyTravel-Business",
+        "evidence_source": "Dynatrace Partner MCP",
+    }
+}
+
+selected_system_name = st.selectbox(
+    "System",
+    list(SYSTEMS.keys()),
+)
+
+selected_system = SYSTEMS[selected_system_name]
+
+st.markdown("## System")
+st.write(selected_system["description"])
+
+system_col1, system_col2, system_col3 = st.columns(3)
+system_col1.metric("System", selected_system_name)
+system_col2.metric("Target Service", selected_system["target_service"])
+system_col3.metric("Evidence Source", selected_system["evidence_source"])
 
 requirements = load_requirements()
 claims = load_claim_library()
@@ -758,12 +965,6 @@ if not approved_governed_claim_ids:
     ]
 
 
-render_ai_decision_trace(
-    selected_requirement=selected_requirement,
-    assessed_claims=assessed_claims,
-    approved_claim_ids=approved_governed_claim_ids,
-)
-
 
 supported_claims = [
     item
@@ -785,11 +986,11 @@ coverage_gaps = [
 
 coverage_score = calculate_coverage_score(assessed_claims)
 
-st.markdown("## Governance Coverage Summary")
+st.markdown("## Assurance Overview")
 
 summary_col1, summary_col2, summary_col3, summary_col4, summary_col5 = st.columns(5)
 
-summary_col1.metric("Total Claims in Review", len(assessed_claims))
+summary_col1.metric("Claims in Review", len(assessed_claims))
 summary_col2.metric("Supported Claims", len(supported_claims))
 summary_col3.metric("Mapping Candidates", len(mapping_candidates))
 summary_col4.metric("Coverage Gaps", len(coverage_gaps))
@@ -807,7 +1008,13 @@ st.info(
 for item in assessed_claims:
     suggestion = item["suggestion"]
 
-    with st.container(border=True):
+    expander_title = (
+        f"{item['discovered_claim_id']} → "
+        f"{item['governed_claim_id']} | "
+        f"{coverage_badge(item['coverage_status'])}"
+    )
+
+    with st.expander(expander_title, expanded=False):
         col1, col2, col3, col4 = st.columns([1.5, 1.5, 2, 2])
 
         col1.write(
@@ -864,175 +1071,142 @@ for item in assessed_claims:
             )
 
 
-st.markdown("## PML Governance Review")
+with st.expander(
+    f"PML Review ({len(approved_governed_claim_ids)} approved)",
+    expanded=False,
+):
+    st.markdown("## PML Review")
 
-st.info(
-    "PML approves assurance intent. Supported claims and approved mapping "
-    "candidates can enter evidence collection. Coverage gaps are routed for "
-    "governance classification."
-)
-
-selected_governed_claim_ids = []
-
-for index, item in enumerate(assessed_claims):
-    is_approvable = item["coverage_status"] in [
-        "SUPPORTED",
-        "MAPPING_CANDIDATE",
-    ]
-
-    with st.container(border=True):
-        col1, col2 = st.columns([1, 3])
-
-        with col1:
-            selected = st.checkbox(
-                item["discovered_claim_id"],
-                value=(
-                    item["governed_claim_id"] in approved_governed_claim_ids
-                    and is_approvable
-                ),
-                disabled=not is_approvable,
-                key=(
-                    f"{selected_requirement.requirement_id}_"
-                    f"pml_{index}_"
-                    f"{item['discovered_claim_id']}_"
-                    f"{item['governed_claim_id']}_"
-                    f"{item.get('source_type', 'UNKNOWN')}"
-                ),
-            )
-
-        with col2:
-            st.write(
-                f"**Discovered Claim:** `{item['discovered_claim_id']}`"
-            )
-            st.write(
-                f"**Governed / Executable Claim:** "
-                f"`{item['governed_claim_id']}`"
-            )
-            st.write(
-                f"**Coverage:** "
-                f"{coverage_badge(item['coverage_status'])}"
-            )
-            st.write(f"**Route:** `{item['governance_route']}`")
-            st.write(f"**Source Type:** `{item.get('source_type', 'UNKNOWN')}`")
-
-            if item.get("mapped_from"):
-                st.info(
-                    f"`{item['mapped_from']}` can be normalized into "
-                    f"`{item['governed_claim_id']}` before assurance execution."
-                )
-
-            if item["coverage_status"] == "MAPPING_CANDIDATE":
-                st.success(
-                    "PML action: approve semantic mapping to existing "
-                    "governed claim before assurance scope."
-                )
-
-            elif item["coverage_status"] == "SUPPORTED":
-                st.success(
-                    "PML action: approve existing governed claim for "
-                    "assurance scope."
-                )
-
-            else:
-                st.warning(
-                    "PML action: classify as new governance claim, reject, "
-                    "or defer."
-                )
-
-        if selected and is_approvable:
-            selected_governed_claim_ids.append(item["governed_claim_id"])
-
-
-if st.button("Approve Supported Claims and Mappings for Assurance"):
-    approved_governed_claim_ids = selected_governed_claim_ids
-    st.session_state["approved_governed_claim_ids"] = approved_governed_claim_ids
-
-    if approved_governed_claim_ids:
-        st.success(
-            "Approved governed claims: "
-            + ", ".join(approved_governed_claim_ids)
-        )
-    else:
-        st.warning("No claims or mappings were approved.")
-
-
-approved_scope_items = [
-    item
-    for item in assessed_claims
-    if item["governed_claim_id"] in approved_governed_claim_ids
-]
-
-st.markdown("## Current Governed Assurance Scope")
-
-scope_col1, scope_col2, scope_col3 = st.columns(3)
-
-scope_col1.metric("Approved Governed Claims", len(approved_scope_items))
-scope_col2.metric("Approved for Partner MCP Evidence", len(approved_scope_items))
-scope_col3.metric("Blocked Coverage Gaps", len(coverage_gaps))
-
-if len(approved_scope_items) == 0:
-    st.warning(
-        "No executable claims are currently approved for the partner MCP "
-        "evidence provider. All discovered claims require governance "
-        "classification or mapping."
-    )
-else:
-    st.success(
-        f"{len(approved_scope_items)} approved governed claim(s) can proceed "
-        "to Dynatrace Partner MCP evidence collection."
+    st.info(
+        "PML determines which claims can enter assurance scope. Supported claims "
+        "and approved mappings proceed to partner MCP evidence collection. "
+        "Coverage gaps remain under review."
     )
 
-render_governed_assurance_scope(
-    approved_governed_claim_ids=approved_governed_claim_ids,
-    assessed_claims=assessed_claims,
-)
+    selected_governed_claim_ids = []
+
+    for index, item in enumerate(assessed_claims):
+        is_approvable = item["coverage_status"] in [
+            "SUPPORTED",
+            "MAPPING_CANDIDATE",
+        ]
+
+        with st.container(border=True):
+            col1, col2 = st.columns([1, 3])
+
+            with col1:
+                selected = st.checkbox(
+                    item["discovered_claim_id"],
+                    value=(
+                        item["governed_claim_id"] in approved_governed_claim_ids
+                        and is_approvable
+                    ),
+                    disabled=not is_approvable,
+                    key=(
+                        f"{selected_requirement.requirement_id}_"
+                        f"pml_{index}_"
+                        f"{item['discovered_claim_id']}_"
+                        f"{item['governed_claim_id']}_"
+                        f"{item.get('source_type', 'UNKNOWN')}"
+                    ),
+                )
+
+            with col2:
+                st.write(
+                    f"**Discovered Claim:** `{item['discovered_claim_id']}`"
+                )
+                st.write(
+                    f"**Governed / Executable Claim:** "
+                    f"`{item['governed_claim_id']}`"
+                )
+                st.write(
+                    f"**Coverage:** "
+                    f"{coverage_badge(item['coverage_status'])}"
+                )
+                st.write(f"**Route:** `{item['governance_route']}`")
+                st.write(f"**Source Type:** `{item.get('source_type', 'UNKNOWN')}`")
+
+                if item.get("mapped_from"):
+                    st.info(
+                        f"`{item['mapped_from']}` can be normalized into "
+                        f"`{item['governed_claim_id']}` before assurance execution."
+                    )
+
+                if item["coverage_status"] == "MAPPING_CANDIDATE":
+                    st.success(
+                        "PML action: approve semantic mapping to existing "
+                        "governed claim before assurance scope."
+                    )
+
+                elif item["coverage_status"] == "SUPPORTED":
+                    st.success(
+                        "PML action: approve existing governed claim for "
+                        "assurance scope."
+                    )
+
+                else:
+                    st.warning(
+                        "PML action: classify as new governance claim, reject, "
+                        "or defer."
+                    )
+
+            if selected and is_approvable:
+                selected_governed_claim_ids.append(item["governed_claim_id"])
 
 
-st.markdown("## Evidence Plane")
+    if st.button("Approve Supported Claims and Mappings for Assurance"):
+        approved_governed_claim_ids = selected_governed_claim_ids
+        st.session_state["approved_governed_claim_ids"] = approved_governed_claim_ids
+
+        if approved_governed_claim_ids:
+            st.success(
+                "Approved governed claims: "
+                + ", ".join(approved_governed_claim_ids)
+            )
+        else:
+            st.warning("No claims or mappings were approved.")
+
+
+st.markdown("## Evidence Collection")
 
 with st.container(border=True):
     st.subheader("Dynatrace Partner MCP Evidence Collection")
 
     st.info(
         "Runtime evidence is requested from the hosted Dynatrace Partner MCP "
-        "server. The platform converts MCP responses into EvidenceRecord "
-        "objects and evaluates them against PML-approved governed claims."
+        "server only when assurance is executed. This avoids loading the large "
+        "MCP tool catalog on every dashboard refresh."
     )
 
-    try:
-        mcp_status = load_dynatrace_mcp_status()
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Approved Claims", len(approved_governed_claim_ids))
+    col2.metric("Evidence Provider", "Dynatrace MCP")
+    col3.metric("Target Service", "easyTravel-Business")
 
-        st.success(
-            "Dynatrace Partner MCP server reachable. "
-            f"{mcp_status['tool_count']} tool(s) available."
-        )
-
-        with st.expander("View Dynatrace Partner MCP Tool Snapshot"):
-            st.json(mcp_status)
-
-    except Exception as exc:
-        st.warning(
-            "Dynatrace Partner MCP server could not be reached from the "
-            "dashboard."
-        )
-        st.code(str(exc))
+    with st.expander("MCP Tools Used During Assurance", expanded=False):
+        st.write("• `get-entity-id` for service entity evidence")
+        st.write("• `query-problems` for active Davis problem evidence")
+        st.write("• `create-dql` for service health and latency DQL")
+        st.write("• `execute-dql` for runtime metric evidence")
 
 
-st.markdown("## Assurance Execution")
+st.markdown("## Run Assurance")
 
 st.info(
     "Assurance is executed only for PML-approved governed claims. "
-    "Coverage gaps remain in governance review."
+    "Coverage gaps remain in review."
 )
 
 if approved_governed_claim_ids:
     if st.button("Run Assurance"):
-        result = run_assurance_for_requirement(
-            selected_requirement,
-            approved_governed_claim_ids,
-        )
+        with st.spinner("Collecting evidence through Dynatrace Partner MCP..."):
+            result = run_assurance_for_requirement(
+                selected_requirement,
+                approved_governed_claim_ids,
+            )
 
         st.session_state["last_assurance_result"] = result
+        st.success("Assurance run completed.")
 else:
     st.warning("Approve at least one governed claim before running assurance.")
 
